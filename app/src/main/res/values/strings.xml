@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ComputerGraphics</string>
+
+    <string-array name="algorithms">
+        <item>DDA</item>
+        <item>Bresenham</item>
+    </string-array>
+</resources>
