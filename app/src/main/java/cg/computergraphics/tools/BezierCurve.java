@@ -6,8 +6,8 @@ import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
-import cg.computergraphics.MyView;
 import cg.computergraphics.Vertex;
+import cg.computergraphics.tools.enums.DDARenderingType;
 
 /**
  * Created by MAX on 14.03.2017.
@@ -16,13 +16,13 @@ import cg.computergraphics.Vertex;
 public class BezierCurve extends DrawingTool {
 
     private ArrayList<Vertex> bezierCurveRefPoints;
-    private ParamLine painter;
+    private DDALine painter;
 
     public BezierCurve(Bitmap mainBitmap, Bitmap fakeBitmap) {
         super(mainBitmap, fakeBitmap);
         bezierCurveRefPoints = new ArrayList<>();
 
-        painter = new ParamLine(mainBitmap, null);
+        painter = new DDALine(mainBitmap, null);
         painter.setColor(0);
     }
 
@@ -50,7 +50,7 @@ public class BezierCurve extends DrawingTool {
                     temp.set(j, newPoint);
                 }
             }
-            painter.drawParamLine(oldX, oldY, temp.get(0).getX(), temp.get(0).getY(), bitmap);
+            painter.drawParamLine(oldX, oldY, temp.get(0).getX(), temp.get(0).getY(), bitmap, DDARenderingType.SOLID);
             oldX = temp.get(0).getX();
             oldY = temp.get(0).getY();
         }

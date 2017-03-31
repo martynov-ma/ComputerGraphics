@@ -18,8 +18,8 @@ import cg.computergraphics.tools.Brush;
 import cg.computergraphics.tools.BrzCircle;
 import cg.computergraphics.tools.BrzLine;
 import cg.computergraphics.tools.DrawingTool;
-import cg.computergraphics.tools.ParamCircle;
-import cg.computergraphics.tools.ParamLine;
+import cg.computergraphics.tools.DDACircle;
+import cg.computergraphics.tools.DDALine;
 
 /**
  * Created by MAX on 03.03.2017.
@@ -91,28 +91,28 @@ public class MyView extends View {
             case 2:
                 switch (settings.getLineDrawingAlgorithm()) {
                     case 0:
-                        drawingTool = new ParamLine(mainBitmap, fakeBitmap);
+                        drawingTool = new DDALine(mainBitmap, fakeBitmap);
                         break;
                     case 1:
                         drawingTool = new BrzLine(mainBitmap, fakeBitmap);
                         break;
 
                     default:
-                        drawingTool = new ParamLine(mainBitmap, fakeBitmap);
+                        drawingTool = new DDALine(mainBitmap, fakeBitmap);
                         break;
                 }
                 break;
             case 3:
                 switch (settings.getCircleDrawingAlgorithm()) {
                     case 0:
-                        drawingTool = new ParamCircle(mainBitmap, fakeBitmap);
+                        drawingTool = new DDACircle(mainBitmap, fakeBitmap);
                         break;
                     case 1:
                         drawingTool = new BrzCircle(mainBitmap, fakeBitmap);
                         break;
 
                     default:
-                        drawingTool = new ParamCircle(mainBitmap, fakeBitmap);
+                        drawingTool = new DDACircle(mainBitmap, fakeBitmap);
                         break;
                 }
                 break;

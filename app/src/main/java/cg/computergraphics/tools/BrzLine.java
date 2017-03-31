@@ -20,7 +20,7 @@ public class BrzLine extends DrawingTool {
         super(mainBitmap, fakeBitmap);
     }
 
-    private void drawBrzLine(float startX, float startY, float endX, float endY, Bitmap bmp){
+    public void drawBrzLine(float startX, float startY, float endX, float endY, Bitmap bmp){
         float x = startX;
         float y = startY;
         float delX = Math.abs(endX - startX);

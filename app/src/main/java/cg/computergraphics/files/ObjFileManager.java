@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import cg.computergraphics.*;
-import cg.computergraphics.tools.ParamLine;
-
+import cg.computergraphics.tools.enums.DDARenderingType;
+import cg.computergraphics.tools.DDALine;
 
 /**
  * Created by MAX on 08.03.2017.
@@ -22,13 +22,13 @@ import cg.computergraphics.tools.ParamLine;
 public class ObjFileManager {
 
     private Bitmap bitmap;
-    private ParamLine painter;
+    private DDALine painter;
     private ArrayList<Vertex> vertices;
     private ArrayList<String[]> faces;
 
     public ObjFileManager(MainActivity mainActivity) {
         bitmap = mainActivity.getMyView().getMainBitmap();
-        painter = new ParamLine(bitmap, null);
+        painter = new DDALine(bitmap, null);
         painter.setColor(Color.BLACK);
 
         vertices = new ArrayList<>();
@@ -88,7 +88,7 @@ public class ObjFileManager {
                                       vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getY(),
                                       vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getX(),
                                       vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getY(),
-                                      bitmap);
+                                      bitmap, DDARenderingType.SOLID);
             }
         }
         return true;

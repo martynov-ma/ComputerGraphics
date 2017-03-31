@@ -167,7 +167,10 @@ class DialogWindowManager {
                         if (Objects.equals(mChosenFile.substring(dot + 1).toLowerCase(), "obj")) {
                             objFileManager = new ObjFileManager(mainActivity);
                             objFileManager.readFile(mChosenFile);
+                            //long startTime = System.currentTimeMillis();
                             objFileManager.drawObj();
+                            //long timeSpent = System.currentTimeMillis() - startTime;
+                            //Toast.makeText(mainActivity, "Obj successfully drawn.\ntime: " + (double) timeSpent / 1000 + " sec.", Toast.LENGTH_LONG).show();
                         } else if (Objects.equals(mChosenFile.substring(dot + 1).toLowerCase(), "bmp")) {
                             bmpFileReader = new BmpFileReader(mainActivity);
                             bmpFileReader.readFile(mChosenFile);

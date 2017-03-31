@@ -9,9 +9,9 @@ import android.view.MotionEvent;
  */
 
 public class BrzCircle extends DrawingTool {
-    private int color = 0;  //"white"
-    private int oldX;
-    private int oldY;
+    private int color;
+    private int x1;
+    private int y1;
     private int x2;
     private int y2;
 
@@ -19,7 +19,7 @@ public class BrzCircle extends DrawingTool {
         super(mainBitmap, fakeBitmap);
     }
 
-    private void drawCircleBrz(int x1, int y1, int x2, int y2, Bitmap bitmap){
+    private void drawCircleBrz(int x1, int y1, int x2, int y2, Bitmap bitmap) {
 
         float a = Math.abs(x2 - x1);
         float b = Math.abs(y2 - y1);
@@ -42,12 +42,12 @@ public class BrzCircle extends DrawingTool {
         bitmap.setPixel(centerX + R, centerY, color);
         bitmap.setPixel(centerX - R, centerY, color);
 
-        while(x <= y){
+        while(x <= y) {
 
-            if(f > 0){
+            if(f > 0) {
                 y--;
                 f = f + 2 * (x - y) + 5;
-            }else{
+            } else {
                 f = f + 2 * x + 3;
             }
             x++;
@@ -71,22 +71,22 @@ public class BrzCircle extends DrawingTool {
 
         switch (motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                oldX = x;
-                oldY = y;
+                x1 = x;
+                y1 = y;
                 break;
             case MotionEvent.ACTION_MOVE:
                 color = 0;
-                drawCircleBrz(oldX, oldY, x2, y2, super.getFakeBitmap());
+                drawCircleBrz(x1, y1, x2, y2, super.getFakeBitmap());
                 x2 = x;
                 y2 = y;
                 color = Color.BLACK;
-                drawCircleBrz(oldX, oldY, x, y, super.getFakeBitmap());
+                drawCircleBrz(x1, y1, x, y, super.getFakeBitmap());
                 break;
             case MotionEvent.ACTION_UP:
-                color = Color.BLACK;
-                drawCircleBrz(oldX, oldY, x, y, super.getMainBitmap());
                 color = 0;
-                drawCircleBrz(oldX, oldY, x, y, super.getFakeBitmap());
+                drawCircleBrz(x1, y1, x, y, super.getFakeBitmap());
+                color = Color.BLACK;
+                drawCircleBrz(x1, y1, x, y, super.getMainBitmap());
                 break;
         }
     }
