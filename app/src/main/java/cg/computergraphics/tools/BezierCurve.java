@@ -16,14 +16,14 @@ import cg.computergraphics.tools.enums.DDARenderingType;
 public class BezierCurve extends DrawingTool {
 
     private ArrayList<Vertex> bezierCurveRefPoints;
-    private DDALine painter;
+    private BrzLine painter;
 
     public BezierCurve(Bitmap mainBitmap, Bitmap fakeBitmap) {
         super(mainBitmap, fakeBitmap);
         bezierCurveRefPoints = new ArrayList<>();
 
-        painter = new DDALine(mainBitmap, null);
-        painter.setColor(0);
+        painter = new BrzLine(mainBitmap, null);
+        painter.setColor(Color.BLACK);
     }
 
     public void cleanRefPoints() {
@@ -50,7 +50,7 @@ public class BezierCurve extends DrawingTool {
                     temp.set(j, newPoint);
                 }
             }
-            painter.drawParamLine(oldX, oldY, temp.get(0).getX(), temp.get(0).getY(), bitmap, DDARenderingType.SOLID);
+            painter.drawBrzLine(oldX, oldY, temp.get(0).getX(), temp.get(0).getY(), bitmap);
             oldX = temp.get(0).getX();
             oldY = temp.get(0).getY();
         }

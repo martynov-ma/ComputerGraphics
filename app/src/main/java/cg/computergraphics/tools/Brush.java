@@ -31,7 +31,7 @@ public class Brush extends DrawingTool {
                 oldY = y;
                 break;
             case MotionEvent.ACTION_MOVE:
-                painter.drawParamLine(oldX,oldY,x,y, super.getMainBitmap(), DDARenderingType.SOLID);
+                painter.drawDDALine(oldX,oldY,x,y, super.getMainBitmap(), DDARenderingType.SOLID);
                 oldX = x;
                 oldY = y;
                 break;

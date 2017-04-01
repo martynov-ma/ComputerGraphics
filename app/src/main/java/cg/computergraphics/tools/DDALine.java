@@ -19,14 +19,13 @@ public class DDALine extends DrawingTool {
 
     public DDALine(Bitmap mainBitmap, Bitmap fakeBitmap) {
         super(mainBitmap, fakeBitmap);
-        color = Color.BLACK;
     }
 
     public void setColor(int color) {
         this.color = color;
     }
 
-    public void drawParamLine(float startX, float startY, float endX, float endY, Bitmap bitmap, DDARenderingType renderingType) {
+    public void drawDDALine(float startX, float startY, float endX, float endY, Bitmap bitmap, DDARenderingType renderingType) {
         float x = startX;
         float y = startY;
 
@@ -78,14 +77,14 @@ public class DDALine extends DrawingTool {
                 endY = y;
                 break;
             case MotionEvent.ACTION_MOVE:
-                drawParamLine(startX, startY, endX, endY, super.getFakeBitmap(), DDARenderingType.ERASE);
+                drawDDALine(startX, startY, endX, endY, super.getFakeBitmap(), DDARenderingType.ERASE);
                 endX = x;
                 endY = y;
-                drawParamLine(startX, startY, x, y, super.getFakeBitmap(), DDARenderingType.GRADIENT);
+                drawDDALine(startX, startY, x, y, super.getFakeBitmap(), DDARenderingType.GRADIENT);
                 break;
             case MotionEvent.ACTION_UP:
-                drawParamLine(startX, startY, x, y, super.getFakeBitmap(), DDARenderingType.ERASE);
-                drawParamLine(startX, startY, x, y, super.getMainBitmap(), DDARenderingType.GRADIENT);
+                drawDDALine(startX, startY, x, y, super.getFakeBitmap(), DDARenderingType.ERASE);
+                drawDDALine(startX, startY, x, y, super.getMainBitmap(), DDARenderingType.GRADIENT);
                 break;
         }
     }

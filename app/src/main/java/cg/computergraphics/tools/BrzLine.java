@@ -19,6 +19,10 @@ public class BrzLine extends DrawingTool {
         super(mainBitmap, fakeBitmap);
     }
 
+    public void setColor(int color) {
+        this.color = color;
+    }
+
     public void drawBrzLine(float startX, float startY, float endX, float endY, Bitmap bitmap){
         float x = startX;
         float y = startY;

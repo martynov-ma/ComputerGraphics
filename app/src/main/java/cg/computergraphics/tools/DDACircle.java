@@ -19,7 +19,7 @@ public class DDACircle extends DrawingTool {
         super(mainBitmap, fakeBitmap);
     }
 
-    private void drawParamCircle(int x1, int y1, int x2, int y2, Bitmap bitmap) {
+    private void drawDDACircle(int x1, int y1, int x2, int y2, Bitmap bitmap) {
 
         float a = Math.abs(x2 - x1);
         float b = Math.abs(y2 - y1);
@@ -60,17 +60,17 @@ public class DDACircle extends DrawingTool {
                 break;
             case MotionEvent.ACTION_MOVE:
                 color = 0;
-                drawParamCircle(x1, y1, x2, y2, super.getFakeBitmap());
+                drawDDACircle(x1, y1, x2, y2, super.getFakeBitmap());
                 x2 = x;
                 y2 = y;
                 color = Color.BLACK;
-                drawParamCircle(x1, y1, x, y, super.getFakeBitmap());
+                drawDDACircle(x1, y1, x, y, super.getFakeBitmap());
                 break;
             case MotionEvent.ACTION_UP:
                 color = 0;
-                drawParamCircle(x1, y1, x, y, super.getFakeBitmap());
+                drawDDACircle(x1, y1, x, y, super.getFakeBitmap());
                 color = Color.BLACK;
-                drawParamCircle(x1, y1, x, y, super.getMainBitmap());
+                drawDDACircle(x1, y1, x, y, super.getMainBitmap());
                 break;
         }
     }

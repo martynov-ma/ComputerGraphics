@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import cg.computergraphics.*;
+import cg.computergraphics.tools.BrzLine;
+import cg.computergraphics.tools.DrawingTool;
 import cg.computergraphics.tools.enums.DDARenderingType;
 import cg.computergraphics.tools.DDALine;
 
@@ -22,14 +24,11 @@ import cg.computergraphics.tools.DDALine;
 public class ObjFileManager {
 
     private Bitmap bitmap;
-    private DDALine painter;
     private ArrayList<Vertex> vertices;
     private ArrayList<String[]> faces;
 
     public ObjFileManager(MainActivity mainActivity) {
         bitmap = mainActivity.getMyView().getMainBitmap();
-        painter = new DDALine(bitmap, null);
-        painter.setColor(Color.BLACK);
 
         vertices = new ArrayList<>();
         faces = new ArrayList<>();
@@ -81,16 +80,31 @@ public class ObjFileManager {
         return true;
     }
 
-    public boolean drawObj() {
+    public void drawObjDDA() {
+        DDALine painter = new DDALine(bitmap, null);
+        painter.setColor(Color.BLACK);
         for (int i = 0; i < faces.size() - 1; i++) {
             for (int j = 0; j < 3; j++) {
-                painter.drawParamLine(vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getX(),
+                painter.drawDDALine(vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getX(),
                                       vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getY(),
                                       vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getX(),
                                       vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getY(),
                                       bitmap, DDARenderingType.SOLID);
             }
         }
-        return true;
+    }
+
+    public void drawObjBrz() {
+        BrzLine painter = new BrzLine(bitmap, null);
+        painter.setColor(Color.BLACK);
+        for (int i = 0; i < faces.size() - 1; i++) {
+            for (int j = 0; j < 3; j++) {
+                painter.drawBrzLine(vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getX(),
+                        vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getY(),
+                        vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getX(),
+                        vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getY(),
+                        bitmap);
+            }
+        }
     }
 }
