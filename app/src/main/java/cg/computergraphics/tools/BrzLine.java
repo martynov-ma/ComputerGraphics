@@ -9,51 +9,26 @@ import android.view.MotionEvent;
  */
 
 public class BrzLine extends DrawingTool {
-    private boolean color = false;
-    private int oldX;
-    private int oldY;
-    private int x2;
-    private int y2;
-
+    private int color;
+    private int startX;
+    private int startY;
+    private int endX;
+    private int endY;
 
     public BrzLine(Bitmap mainBitmap, Bitmap fakeBitmap) {
         super(mainBitmap, fakeBitmap);
     }
 
-    public void drawBrzLine(float startX, float startY, float endX, float endY, Bitmap bmp){
+    public void drawBrzLine(float startX, float startY, float endX, float endY, Bitmap bitmap){
         float x = startX;
         float y = startY;
         float delX = Math.abs(endX - startX);
         float delY = Math.abs(endY - startY);
         if(delX !=0 || delY != 0) {
-            int s1 = 1;
-            int s2 = 1;
-            System.out.println("1) delX = " + delX);
-            if (endX - startX < 0) {
-                s1 = -1;
-            } else {
-                if (endX - startX > 0) {
-                    s1 = 1;
-                } else {
-                    if (endX - startX == 0) {
-                        s1 = 0;
-                    }
-                }
-            }
+            int s1 = (int) Math.signum(endX - startX);
+            int s2 = (int) Math.signum(endY - startY);
 
-            if (endY - startY < 0) {
-                s2 = -1;
-            } else {
-                if (endY - startY > 0) {
-                    s2 = 1;
-                } else {
-                    if (endY - startY == 0) {
-                        s2 = 0;
-                    }
-                }
-            }
-
-            boolean swap = true;
+            boolean swap;
             if (delY > delX) {
                 float buf = delX;
                 delX = delY;
@@ -62,36 +37,22 @@ public class BrzLine extends DrawingTool {
             } else {
                 swap = false;
             }
-            System.out.println("2) delX = " + delX);
+
             float f = 2 * delY - delX;
             float f1 = 2 * delY;
             float f2 = 2 * delX;
-            System.out.println("f = " + f);
 
             for (int i = 0; i <= delX; i++) {
+                bitmap.setPixel((int) x, (int) y, color);
 
-                if (color) {
-                    System.out.println("чёрный");
-                    bmp.setPixel((int) x, (int) y, Color.BLACK);
-                } else {
-                    System.out.println("белый");
-                    bmp.setPixel((int) x, (int) y, 0);
-                }
-//drawPoint(x,y);
                 while (f >= 0) {
-                    if (swap) {
-                        x += s1;
-                    } else {
-                        y += s2;
-                    }
+                    if (swap) x += s1;
+                    else y += s2;
                     f -= f2;
-//System.out.println("f = " + f);
                 }
-                if (swap) {
-                    y += s2;
-                } else {
-                    x += s1;
-                }
+
+                if (swap) y += s2;
+                else x += s1;
                 f += f1;
             }
         }
@@ -105,27 +66,24 @@ public class BrzLine extends DrawingTool {
 
         switch (motionEvent.getAction()){
             case MotionEvent.ACTION_DOWN:
-                color = true;
-                //System.out.println(x + " " + y + " " + (int)motionEvent.getX() + " " + (int)motionEvent.getY());
-                super.getFakeBitmap().setPixel(x, y, Color.BLACK);
-                oldX = x;
-                oldY = y;
-                x2 = x;
-                y2 = y;
+                startX = x;
+                startY = y;
+                endX = x;
+                endY = y;
                 break;
             case MotionEvent.ACTION_MOVE:
-                color = false;
-                drawBrzLine(oldX, oldY, x2, y2, super.getFakeBitmap());
-                x2 = x;
-                y2 = y;
-                color = true;
-                drawBrzLine(oldX, oldY, x, y, super.getFakeBitmap());
+                color = 0;
+                drawBrzLine(startX, startY, endX, endY, super.getFakeBitmap());
+                endX = x;
+                endY = y;
+                color = Color.BLACK;
+                drawBrzLine(startX, startY, x, y, super.getFakeBitmap());
                 break;
             case MotionEvent.ACTION_UP:
-                color = true;
-                drawBrzLine(oldX, oldY, x, y, super.getMainBitmap());
-                color = false;
-                drawBrzLine(oldX, oldY, x, y, super.getFakeBitmap());
+                color = 0;
+                drawBrzLine(startX, startY, x, y, super.getFakeBitmap());
+                color = Color.BLACK;
+                drawBrzLine(startX, startY, x, y, super.getMainBitmap());
                 break;
         }
     }
