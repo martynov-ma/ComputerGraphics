@@ -1,6 +1,7 @@
 package cg.computergraphics.tools;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.view.MotionEvent;
 
 import cg.computergraphics.tools.enums.DDARenderingType;
@@ -17,6 +18,7 @@ public class Brush extends DrawingTool {
     public Brush(Bitmap mainBitmap) {
         super(mainBitmap, null);
         painter = new DDALine(mainBitmap, null);
+        painter.setColor(Color.BLACK);
     }
 
     @Override

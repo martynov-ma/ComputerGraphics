@@ -34,29 +34,29 @@ public class DDALine extends DrawingTool {
         float delY = (endY - startY) / N;
 
         //color approximation
-        int startColor = Color.rgb(250, 0, 0);
-        int endColor = Color.rgb(0, 0, 250);
-        int r1 = Color.red(startColor), g1 = Color.green(startColor), b1 = Color.blue(startColor);
-        int r2 = Color.red(endColor), g2 = Color.green(endColor), b2 = Color.blue(endColor);
+        int startColor = Color.rgb(255, 0, 0);
+        int endColor = Color.rgb(0, 0, 255);
+        float r1 = Color.red(startColor), g1 = Color.green(startColor), b1 = Color.blue(startColor);
+        float r2 = Color.red(endColor), g2 = Color.green(endColor), b2 = Color.blue(endColor);
 
-        float delR = (float) (r2 - r1) / N;
-        float delG = (float) (g2 - g1) / N;
-        float delB = (float) (b2 - b1) / N;
+        float delR = (r2 - r1) / N;
+        float delG = (g2 - g1) / N;
+        float delB = (b2 - b1) / N;
 
         for (int i = 0; i < N; i++, x += delX, y += delY) {
             try {
                 switch (renderingType) {
                     case SOLID:
-                        bitmap.setPixel((int) x, (int) y, color);
+                        bitmap.setPixel(Math.round(x), Math.round(y), color);
                         break;
                     case GRADIENT:
-                        bitmap.setPixel((int) x, (int) y, Color.rgb(r1, g1, b1));
+                        bitmap.setPixel(Math.round(x), Math.round(y), Color.rgb(Math.round(r1), Math.round(g1), Math.round(b1)));
                         r1 += delR;
                         g1 += delG;
                         b1 += delB;
                         break;
                     case ERASE:
-                        bitmap.setPixel((int) x, (int) y, 0);
+                        bitmap.setPixel(Math.round(x), Math.round(y), 0);
                         break;
                 }
             } catch (IllegalArgumentException ignored) {}
