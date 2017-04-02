@@ -1,10 +1,12 @@
 package cg.computergraphics;
 
+import android.graphics.Color;
+
 /**
  * Created by MAX on 18.03.2017.
  */
 
-class Settings {
+public class AppSettings {
     private int bitmapWidth;
     private int bitmapHeight;
 
@@ -13,7 +15,9 @@ class Settings {
 
     private int mosaicSize;
 
-    Settings() {
+    private int drawingColor;
+
+    AppSettings() {
         bitmapWidth = 2000;
         bitmapHeight = 2000;
 
@@ -21,6 +25,8 @@ class Settings {
         circleDrawingAlgorithm = 0;
 
         mosaicSize = 10;
+
+        drawingColor = Color.BLACK;
     }
 
     int getBitmapWidth() {
@@ -65,4 +71,12 @@ class Settings {
         this.mosaicSize = mosaicSize;
     }
 
+
+    public int getDrawingColor() {
+        return drawingColor;
+    }
+
+    public void setDrawingColor(int drawingColor) {
+        this.drawingColor = drawingColor;
+    }
 }

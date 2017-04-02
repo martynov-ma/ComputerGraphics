@@ -1,6 +1,6 @@
 package cg.computergraphics.tools.enums;
 
-public enum DDARenderingType {
+public enum RenderingType {
     SOLID,
     GRADIENT,
     ERASE

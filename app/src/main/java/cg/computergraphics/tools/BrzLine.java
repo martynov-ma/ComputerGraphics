@@ -4,12 +4,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.MotionEvent;
 
+import cg.computergraphics.tools.enums.RenderingType;
+
 /**
  * Created by MAX on 13.03.2017.
  */
 
 public class BrzLine extends DrawingTool {
-    private int color;
     private int startX;
     private int startY;
     private int endX;
@@ -19,11 +20,7 @@ public class BrzLine extends DrawingTool {
         super(mainBitmap, fakeBitmap);
     }
 
-    public void setColor(int color) {
-        this.color = color;
-    }
-
-    public void drawBrzLine(float startX, float startY, float endX, float endY, Bitmap bitmap){
+    public void drawBrzLine(float startX, float startY, float endX, float endY, Bitmap bitmap, RenderingType renderingType){
         float x = startX;
         float y = startY;
         float delX = Math.abs(endX - startX);
@@ -47,7 +44,14 @@ public class BrzLine extends DrawingTool {
             float f2 = 2 * delX;
 
             for (int i = 0; i <= delX; i++) {
-                bitmap.setPixel((int) x, (int) y, color);
+                switch (renderingType) {
+                    case SOLID:
+                        bitmap.setPixel((int) x, (int) y, super.getColor());
+                        break;
+                    case ERASE:
+                        bitmap.setPixel((int) x, (int) y, 0);
+                        break;
+                }
 
                 while (f >= 0) {
                     if (swap) x += s1;
@@ -76,18 +80,14 @@ public class BrzLine extends DrawingTool {
                 endY = y;
                 break;
             case MotionEvent.ACTION_MOVE:
-                color = 0;
-                drawBrzLine(startX, startY, endX, endY, super.getFakeBitmap());
+                drawBrzLine(startX, startY, endX, endY, super.getFakeBitmap(), RenderingType.ERASE);
                 endX = x;
                 endY = y;
-                color = Color.BLACK;
-                drawBrzLine(startX, startY, x, y, super.getFakeBitmap());
+                drawBrzLine(startX, startY, x, y, super.getFakeBitmap(), RenderingType.SOLID);
                 break;
             case MotionEvent.ACTION_UP:
-                color = 0;
-                drawBrzLine(startX, startY, x, y, super.getFakeBitmap());
-                color = Color.BLACK;
-                drawBrzLine(startX, startY, x, y, super.getMainBitmap());
+                drawBrzLine(startX, startY, x, y, super.getFakeBitmap(), RenderingType.ERASE);
+                drawBrzLine(startX, startY, x, y, super.getMainBitmap(), RenderingType.SOLID);
                 break;
         }
     }

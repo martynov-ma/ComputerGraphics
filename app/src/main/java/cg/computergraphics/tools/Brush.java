@@ -1,10 +1,9 @@
 package cg.computergraphics.tools;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.view.MotionEvent;
 
-import cg.computergraphics.tools.enums.DDARenderingType;
+import cg.computergraphics.tools.enums.RenderingType;
 
 /**
  * Created by MAX on 14.03.2017.
@@ -18,7 +17,16 @@ public class Brush extends DrawingTool {
     public Brush(Bitmap mainBitmap) {
         super(mainBitmap, null);
         painter = new DDALine(mainBitmap, null);
-        painter.setColor(Color.BLACK);
+    }
+
+    @Override
+    public int getColor() {
+        return painter.getColor();
+    }
+
+    @Override
+    public void setColor(int color) {
+        painter.setColor(color);
     }
 
     @Override
@@ -33,7 +41,7 @@ public class Brush extends DrawingTool {
                 oldY = y;
                 break;
             case MotionEvent.ACTION_MOVE:
-                painter.drawDDALine(oldX,oldY,x,y, super.getMainBitmap(), DDARenderingType.SOLID);
+                painter.drawDDALine(oldX,oldY,x,y, super.getMainBitmap(), RenderingType.SOLID);
                 oldX = x;
                 oldY = y;
                 break;

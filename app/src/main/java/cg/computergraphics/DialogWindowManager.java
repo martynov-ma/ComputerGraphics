@@ -2,6 +2,7 @@ package cg.computergraphics;
 
 import android.content.DialogInterface;
 import android.os.Environment;
+import android.support.annotation.ColorInt;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,9 @@ import java.util.Objects;
 import cg.computergraphics.files.BmpFileReader;
 import cg.computergraphics.files.BmpFileWriter;
 import cg.computergraphics.files.ObjFileManager;
+import me.priyesh.chroma.ChromaDialog;
+import me.priyesh.chroma.ColorMode;
+import me.priyesh.chroma.ColorSelectListener;
 
 /**
  * Created by MAX on 19.03.2017.
@@ -31,6 +35,7 @@ class DialogWindowManager {
     static final int IDD_SETTINGS = 3;
     static final int IDD_OPEN_FILE = 4;
     static final int IDD_SET_FILE_NAME = 5;
+    static final int IDD_COLOR_PICKER = 6;
 
     private MainActivity mainActivity;
 
@@ -41,7 +46,7 @@ class DialogWindowManager {
     private TextView scaleTextView;
     private SeekBar scaleSeekBar;
 
-    //settings dialog content
+    //appSettings dialog content
     private TextView bitmapWidthEdit;
     private TextView bitmapHeightEdit;
     private Spinner lineSpinner;
@@ -79,6 +84,9 @@ class DialogWindowManager {
                 break;
             case IDD_SET_FILE_NAME:
                 showSetFileNameDialog();
+                break;
+            case IDD_COLOR_PICKER:
+                showColorPickerDialog();
                 break;
         }
     }
@@ -134,7 +142,7 @@ class DialogWindowManager {
         prepareView(setSettingsView);
 
         builder = new AlertDialog.Builder(mainActivity);
-        builder.setTitle("Settings")
+        builder.setTitle("AppSettings")
                 .setView(setSettingsView)
                 .setPositiveButton("APPLY", new DialogInterface.OnClickListener() {
                     @Override
@@ -168,7 +176,7 @@ class DialogWindowManager {
                             objFileManager = new ObjFileManager(mainActivity);
                             objFileManager.readFile(mChosenFile);
                             long startTime, timeSpent;
-                            switch (MainActivity.settings.getLineDrawingAlgorithm()) {
+                            switch (MainActivity.appSettings.getLineDrawingAlgorithm()) {
                                 case 0:
                                     startTime = System.currentTimeMillis();
                                     objFileManager.drawObjDDA();
@@ -230,6 +238,20 @@ class DialogWindowManager {
         initSetFileNameDialog(dialog);
     }
 
+    private void showColorPickerDialog() {
+        new ChromaDialog.Builder()
+                .initialColor(mainActivity.getMyView().getDrawingTool().getColor())
+                .colorMode(ColorMode.RGB)
+                .onColorSelected(new ColorSelectListener() {
+                    @Override
+                    public void onColorSelected(@ColorInt int i) {
+                        mainActivity.getMyView().getDrawingTool().setColor(i);
+                        MainActivity.appSettings.setDrawingColor(i);
+                    }
+                })
+                .create()
+                .show(mainActivity.getSupportFragmentManager(), "ChromaDialog");
+    }
 
     private void prepareView(View view) {
         if (view.getParent() != null) ((ViewGroup) view.getParent()).removeView(view);
@@ -262,36 +284,36 @@ class DialogWindowManager {
 
     private void initSettingsDialog(AlertDialog dialog) {
         bitmapWidthEdit = (TextView) dialog.findViewById(R.id.bitmapWidthEdit);
-        bitmapWidthEdit.setText(String.valueOf(MainActivity.settings.getBitmapWidth()));
+        bitmapWidthEdit.setText(String.valueOf(MainActivity.appSettings.getBitmapWidth()));
 
         bitmapHeightEdit = (TextView) dialog.findViewById(R.id.bitmapHeightEdit);
-        bitmapHeightEdit.setText(String.valueOf(MainActivity.settings.getBitmapHeight()));
+        bitmapHeightEdit.setText(String.valueOf(MainActivity.appSettings.getBitmapHeight()));
 
         lineSpinner = (Spinner) dialog.findViewById(R.id.lineSpinner);
-        lineSpinner.setSelection(MainActivity.settings.getLineDrawingAlgorithm());
+        lineSpinner.setSelection(MainActivity.appSettings.getLineDrawingAlgorithm());
         circleSpinner = (Spinner) dialog.findViewById(R.id.circleSpinner);
-        circleSpinner.setSelection(MainActivity.settings.getCircleDrawingAlgorithm());
+        circleSpinner.setSelection(MainActivity.appSettings.getCircleDrawingAlgorithm());
 
         mosaicSize = (TextView) dialog.findViewById(R.id.mosaicSizeEdit);
-        mosaicSize.setText(String.valueOf(MainActivity.settings.getMosaicSize()));
+        mosaicSize.setText(String.valueOf(MainActivity.appSettings.getMosaicSize()));
     }
 
     private void applySettings() {
-        Settings settings = MainActivity.settings;
+        AppSettings appSettings = MainActivity.appSettings;
         int newBitmapWidth = Integer.parseInt(bitmapWidthEdit.getText().toString());
         int newBitmapHeight = Integer.parseInt(bitmapHeightEdit.getText().toString());
 
-        if (settings.getBitmapWidth() != newBitmapWidth || MainActivity.settings.getBitmapHeight() != newBitmapHeight) {
-            settings.setBitmapWidth(newBitmapWidth);
-            settings.setBitmapHeight(newBitmapHeight);
+        if (appSettings.getBitmapWidth() != newBitmapWidth || MainActivity.appSettings.getBitmapHeight() != newBitmapHeight) {
+            appSettings.setBitmapWidth(newBitmapWidth);
+            appSettings.setBitmapHeight(newBitmapHeight);
             mainActivity.getMyView().updateBitmap();
         }
 
-        settings.setLineDrawingAlgorithm(lineSpinner.getSelectedItemPosition());
-        settings.setCircleDrawingAlgorithm(circleSpinner.getSelectedItemPosition());
+        appSettings.setLineDrawingAlgorithm(lineSpinner.getSelectedItemPosition());
+        appSettings.setCircleDrawingAlgorithm(circleSpinner.getSelectedItemPosition());
         mainActivity.getMyView().setDrawingTool(mainActivity.getMyView().getSelectedTool());
 
-        settings.setMosaicSize(Integer.parseInt(mosaicSize.getText().toString()));
+        appSettings.setMosaicSize(Integer.parseInt(mosaicSize.getText().toString()));
     }
 
     private void initSetFileNameDialog(AlertDialog dialog) {

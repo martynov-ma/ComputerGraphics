@@ -13,8 +13,7 @@ import java.util.ArrayList;
 
 import cg.computergraphics.*;
 import cg.computergraphics.tools.BrzLine;
-import cg.computergraphics.tools.DrawingTool;
-import cg.computergraphics.tools.enums.DDARenderingType;
+import cg.computergraphics.tools.enums.RenderingType;
 import cg.computergraphics.tools.DDALine;
 
 /**
@@ -89,7 +88,7 @@ public class ObjFileManager {
                                       vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getY(),
                                       vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getX(),
                                       vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getY(),
-                                      bitmap, DDARenderingType.SOLID);
+                                      bitmap, RenderingType.SOLID);
             }
         }
     }
@@ -103,7 +102,7 @@ public class ObjFileManager {
                         vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getY(),
                         vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getX(),
                         vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getY(),
-                        bitmap);
+                        bitmap, RenderingType.SOLID);
             }
         }
     }

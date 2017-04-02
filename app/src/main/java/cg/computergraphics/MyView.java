@@ -33,23 +33,23 @@ public class MyView extends View {
 
     private Paint paint;
     private DrawingTool drawingTool;
+    private int selectedTool;
 
     private GestureDetector gd;
     private Scroller scroller;  //считает скроллинг
-    private int scrollX, scrollY;   //координаты скроллинга
     private boolean isScrollEnabled;
-    private int selectedTool;
+    private int scrollX, scrollY;   //координаты скроллинга
 
-    private Settings settings;
+    private AppSettings appSettings;
 
 
     public MyView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        settings = MainActivity.settings;
+        appSettings = MainActivity.appSettings;
 
-        mainBitmap = Bitmap.createBitmap(settings.getBitmapWidth(), settings.getBitmapHeight(), Bitmap.Config.ARGB_8888);
-        fakeBitmap = Bitmap.createBitmap(settings.getBitmapWidth(), settings.getBitmapHeight(), Bitmap.Config.ARGB_8888);
+        mainBitmap = Bitmap.createBitmap(appSettings.getBitmapWidth(), appSettings.getBitmapHeight(), Bitmap.Config.ARGB_8888);
+        fakeBitmap = Bitmap.createBitmap(appSettings.getBitmapWidth(), appSettings.getBitmapHeight(), Bitmap.Config.ARGB_8888);
         bitmapScale = 1;
 
         paint = new Paint();
@@ -63,15 +63,15 @@ public class MyView extends View {
     public void setBitmap(Bitmap bitmap) {
         mainBitmap = bitmap;
         fakeBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        settings.setBitmapWidth(bitmap.getWidth());
-        settings.setBitmapHeight(bitmap.getHeight());
+        appSettings.setBitmapWidth(bitmap.getWidth());
+        appSettings.setBitmapHeight(bitmap.getHeight());
         setDrawingTool(selectedTool);
         invalidate();
     }
 
     public void updateBitmap() {
-        mainBitmap = Bitmap.createBitmap(settings.getBitmapWidth(), settings.getBitmapHeight(), Bitmap.Config.ARGB_8888);
-        fakeBitmap = Bitmap.createBitmap(settings.getBitmapWidth(), settings.getBitmapHeight(), Bitmap.Config.ARGB_8888);
+        mainBitmap = Bitmap.createBitmap(appSettings.getBitmapWidth(), appSettings.getBitmapHeight(), Bitmap.Config.ARGB_8888);
+        fakeBitmap = Bitmap.createBitmap(appSettings.getBitmapWidth(), appSettings.getBitmapHeight(), Bitmap.Config.ARGB_8888);
         invalidate();
     }
 
@@ -89,7 +89,7 @@ public class MyView extends View {
                 drawingTool = new Brush(mainBitmap);
                 break;
             case 2:
-                switch (settings.getLineDrawingAlgorithm()) {
+                switch (appSettings.getLineDrawingAlgorithm()) {
                     case 0:
                         drawingTool = new DDALine(mainBitmap, fakeBitmap);
                         break;
@@ -103,7 +103,7 @@ public class MyView extends View {
                 }
                 break;
             case 3:
-                switch (settings.getCircleDrawingAlgorithm()) {
+                switch (appSettings.getCircleDrawingAlgorithm()) {
                     case 0:
                         drawingTool = new DDACircle(mainBitmap, fakeBitmap);
                         break;
@@ -124,6 +124,10 @@ public class MyView extends View {
 
     public Bitmap getMainBitmap() {
         return mainBitmap;
+    }
+
+    public DrawingTool getDrawingTool() {
+        return drawingTool;
     }
 
     public int getSelectedTool() {
@@ -154,9 +158,9 @@ public class MyView extends View {
     }
 
     public Bitmap getMosaic() {
-        int mosaicSize = settings.getMosaicSize();
-        int bitmapWidth = settings.getBitmapWidth();
-        int bitmapHeight = settings.getBitmapHeight();
+        int mosaicSize = appSettings.getMosaicSize();
+        int bitmapWidth = appSettings.getBitmapWidth();
+        int bitmapHeight = appSettings.getBitmapHeight();
 
         Bitmap mosaicBmp = Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(mosaicBmp);;
@@ -213,10 +217,10 @@ public class MyView extends View {
         @Override
         public boolean onScroll(MotionEvent me1, MotionEvent me2, float X, float Y){
             scroller.abortAnimation();
-            if (scrollX + X > 0 && scrollX + X < settings.getBitmapWidth() - getWidth()) {   //plan.getWidth()
+            if (scrollX + X > 0 && scrollX + X < appSettings.getBitmapWidth() - getWidth()) {   //plan.getWidth()
                 scrollBy((int) X, 0);
             }
-            if (scrollY + Y > 0 && scrollY + Y < settings.getBitmapWidth() - getHeight()) {  //plan.getHeight()
+            if (scrollY + Y > 0 && scrollY + Y < appSettings.getBitmapWidth() - getHeight()) {  //plan.getHeight()
                 scrollBy(0, (int) Y);
             }
             return true;
@@ -224,7 +228,7 @@ public class MyView extends View {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY){
-            scroller.fling(scrollX, scrollY, -(int)velocityX, -(int)velocityY, 0, settings.getBitmapWidth() - getWidth(), 0, settings.getBitmapWidth() - getHeight());
+            scroller.fling(scrollX, scrollY, -(int)velocityX, -(int)velocityY, 0, appSettings.getBitmapWidth() - getWidth(), 0, appSettings.getBitmapWidth() - getHeight());
             invalidate();
             return true;
         }

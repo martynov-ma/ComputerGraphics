@@ -1,12 +1,12 @@
 package cg.computergraphics;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 
 import com.mikepenz.materialdrawer.Drawer;
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private MyView myview;
     private Drawer sideBar;
 
-    static Settings settings;
+    public static AppSettings appSettings;
 
     private DialogWindowManager dialogWindowManager;
 
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //app settings
-        settings = new Settings();
+        appSettings = new AppSettings();
 
         setContentView(R.layout.activity_main);
         myview = (MyView) findViewById(R.id.myview);
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         dialogWindowManager = new DialogWindowManager(MainActivity.this);
 
         //clean button
-        Button button = (Button) findViewById(R.id.button);
+        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.clean_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,7 +75,16 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 }),
                         new DividerDrawerItem(),
-                        new SwitchDrawerItem().withSelectable(false).withIcon(R.drawable.ic_meteor).withName("Scroll")
+                        new PrimaryDrawerItem().withSelectable(false).withName("Color").withIcon(R.drawable.ic_palette)
+                                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                                    @Override
+                                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                                        dialogWindowManager.showDialog(DialogWindowManager.IDD_COLOR_PICKER);
+                                        return true;
+                                    }
+                                }),
+                        new DividerDrawerItem(),
+                        new SwitchDrawerItem().withSelectable(false).withName("Scroll").withIcon(R.drawable.ic_meteor)
                                 .withOnCheckedChangeListener(new OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {

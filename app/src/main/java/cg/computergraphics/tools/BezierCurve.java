@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 import java.util.ArrayList;
 
 import cg.computergraphics.Vertex;
-import cg.computergraphics.tools.enums.DDARenderingType;
+import cg.computergraphics.tools.enums.RenderingType;
 
 /**
  * Created by MAX on 14.03.2017.
@@ -15,22 +15,31 @@ import cg.computergraphics.tools.enums.DDARenderingType;
 
 public class BezierCurve extends DrawingTool {
 
-    private ArrayList<Vertex> bezierCurveRefPoints;
+    private ArrayList<Vertex> refPoints;
     private BrzLine painter;
 
     public BezierCurve(Bitmap mainBitmap, Bitmap fakeBitmap) {
         super(mainBitmap, fakeBitmap);
-        bezierCurveRefPoints = new ArrayList<>();
+        refPoints = new ArrayList<>();
 
         painter = new BrzLine(mainBitmap, null);
-        painter.setColor(Color.BLACK);
+    }
+
+    @Override
+    public int getColor() {
+        return painter.getColor();
+    }
+
+    @Override
+    public void setColor(int color) {
+        painter.setColor(color);
     }
 
     public void cleanRefPoints() {
-        bezierCurveRefPoints.clear();
+        refPoints.clear();
     }
 
-    private void drawBezierCurve(ArrayList<Vertex> refPoints, Bitmap bitmap) {
+    private void drawBezierCurve(ArrayList<Vertex> refPoints, Bitmap bitmap, RenderingType renderingType) {
         int m = refPoints.size();
         float x1, y1, x2, y2, newPointX, newPointY;
         float oldX = refPoints.get(0).getX();
@@ -50,7 +59,7 @@ public class BezierCurve extends DrawingTool {
                     temp.set(j, newPoint);
                 }
             }
-            painter.drawBrzLine(oldX, oldY, temp.get(0).getX(), temp.get(0).getY(), bitmap);
+            painter.drawBrzLine(oldX, oldY, temp.get(0).getX(), temp.get(0).getY(), bitmap, renderingType);
             oldX = temp.get(0).getX();
             oldY = temp.get(0).getY();
         }
@@ -63,33 +72,26 @@ public class BezierCurve extends DrawingTool {
 
         switch (motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (bezierCurveRefPoints.size() == 0) {
-                    bezierCurveRefPoints.add(new Vertex(x, y));
-                } else if (bezierCurveRefPoints.size() >= 2) {
-                    painter.setColor(0);
-                    drawBezierCurve(bezierCurveRefPoints, super.getFakeBitmap());
-                    bezierCurveRefPoints.add(bezierCurveRefPoints.size() - 1, new Vertex(x, y));
-                    painter.setColor(Color.BLACK);
-                    drawBezierCurve(bezierCurveRefPoints, super.getFakeBitmap());
+                if (refPoints.size() == 0) {
+                    refPoints.add(new Vertex(x, y));
+                } else if (refPoints.size() >= 2) {
+                    drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.ERASE);
+                    refPoints.add(refPoints.size() - 1, new Vertex(x, y));
+                    drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.SOLID);
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (bezierCurveRefPoints.size() < 2) {
-                    bezierCurveRefPoints.add(new Vertex(x, y));
-                    painter.setColor(Color.BLACK);
-                    drawBezierCurve(bezierCurveRefPoints, super.getFakeBitmap());
-                } else if (bezierCurveRefPoints.size() == 2) {
-                    painter.setColor(0);
-                    drawBezierCurve(bezierCurveRefPoints, super.getFakeBitmap());
-                    bezierCurveRefPoints.set(bezierCurveRefPoints.size() - 1, new Vertex(x, y));
-                    painter.setColor(Color.BLACK);
-                    drawBezierCurve(bezierCurveRefPoints, super.getFakeBitmap());
-                } else if (bezierCurveRefPoints.size() > 2){
-                    painter.setColor(0);
-                    drawBezierCurve(bezierCurveRefPoints, super.getFakeBitmap());
-                    bezierCurveRefPoints.set(bezierCurveRefPoints.size() - 2, new Vertex(x, y));
-                    painter.setColor(Color.BLACK);
-                    drawBezierCurve(bezierCurveRefPoints, super.getFakeBitmap());
+                if (refPoints.size() < 2) {
+                    refPoints.add(new Vertex(x, y));
+                    drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.SOLID);
+                } else if (refPoints.size() == 2) {
+                    drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.ERASE);
+                    refPoints.set(refPoints.size() - 1, new Vertex(x, y));
+                    drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.SOLID);
+                } else if (refPoints.size() > 2){
+                    drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.ERASE);
+                    refPoints.set(refPoints.size() - 2, new Vertex(x, y));
+                    drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.SOLID);
                 }
                 break;
         }

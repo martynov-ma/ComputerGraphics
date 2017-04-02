@@ -30,4 +30,5 @@ dependencies {
     compile('com.mikepenz:materialdrawer:5.8.2@aar') {
         transitive = true
     }
+    compile 'me.priyesh:chroma:1.0.2'
 }

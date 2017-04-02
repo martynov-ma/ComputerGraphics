@@ -4,14 +4,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.MotionEvent;
 
-import cg.computergraphics.tools.enums.DDARenderingType;
+import cg.computergraphics.tools.enums.RenderingType;
 
 /**
  * Created by MAX on 13.03.2017.
  */
 
 public class DDALine extends DrawingTool {
-    private int color;
     private int startX;
     private int startY;
     private int endX;
@@ -21,11 +20,7 @@ public class DDALine extends DrawingTool {
         super(mainBitmap, fakeBitmap);
     }
 
-    public void setColor(int color) {
-        this.color = color;
-    }
-
-    public void drawDDALine(float startX, float startY, float endX, float endY, Bitmap bitmap, DDARenderingType renderingType) {
+    public void drawDDALine(float startX, float startY, float endX, float endY, Bitmap bitmap, RenderingType renderingType) {
         float x = startX;
         float y = startY;
 
@@ -47,7 +42,7 @@ public class DDALine extends DrawingTool {
             try {
                 switch (renderingType) {
                     case SOLID:
-                        bitmap.setPixel(Math.round(x), Math.round(y), color);
+                        bitmap.setPixel(Math.round(x), Math.round(y), super.getColor());
                         break;
                     case GRADIENT:
                         bitmap.setPixel(Math.round(x), Math.round(y), Color.rgb(Math.round(r1), Math.round(g1), Math.round(b1)));
@@ -77,14 +72,14 @@ public class DDALine extends DrawingTool {
                 endY = y;
                 break;
             case MotionEvent.ACTION_MOVE:
-                drawDDALine(startX, startY, endX, endY, super.getFakeBitmap(), DDARenderingType.ERASE);
+                drawDDALine(startX, startY, endX, endY, super.getFakeBitmap(), RenderingType.ERASE);
                 endX = x;
                 endY = y;
-                drawDDALine(startX, startY, x, y, super.getFakeBitmap(), DDARenderingType.GRADIENT);
+                drawDDALine(startX, startY, x, y, super.getFakeBitmap(), RenderingType.GRADIENT);
                 break;
             case MotionEvent.ACTION_UP:
-                drawDDALine(startX, startY, x, y, super.getFakeBitmap(), DDARenderingType.ERASE);
-                drawDDALine(startX, startY, x, y, super.getMainBitmap(), DDARenderingType.GRADIENT);
+                drawDDALine(startX, startY, x, y, super.getFakeBitmap(), RenderingType.ERASE);
+                drawDDALine(startX, startY, x, y, super.getMainBitmap(), RenderingType.GRADIENT);
                 break;
         }
     }

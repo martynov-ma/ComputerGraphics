@@ -10,7 +10,7 @@
     <item
         android:id="@+id/menuitem_writefile"
         android:orderInCategory="1"
-        android:title="Write Bmp file..." />
+        android:title="Write .bmp file..." />
     <item
         android:id="@+id/menuitem_scale"
         android:orderInCategory="2"
