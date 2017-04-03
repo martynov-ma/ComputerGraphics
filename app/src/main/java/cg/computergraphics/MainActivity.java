@@ -41,15 +41,6 @@ public class MainActivity extends AppCompatActivity {
         //alert dialogs manager
         dialogWindowManager = new DialogWindowManager(MainActivity.this);
 
-        //clean button
-        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.clean_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myview.cleanScreen();
-            }
-        });
-
         //toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("ComputerGraphics");
@@ -75,14 +66,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 }),
                         new DividerDrawerItem(),
-                        new PrimaryDrawerItem().withSelectable(false).withName("Color").withIcon(R.drawable.ic_palette)
-                                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                                    @Override
-                                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                                        dialogWindowManager.showDialog(DialogWindowManager.IDD_COLOR_PICKER);
-                                        return true;
-                                    }
-                                }),
+                        new PrimaryDrawerItem().withIdentifier(5).withName("Fill").withIcon(R.drawable.ic_fill),
                         new DividerDrawerItem(),
                         new SwitchDrawerItem().withSelectable(false).withName("Scroll").withIcon(R.drawable.ic_meteor)
                                 .withOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -103,6 +87,23 @@ public class MainActivity extends AppCompatActivity {
                 //.withDrawerWidthPx(170)
                 .build();
 
+        //color picker button
+        FloatingActionButton colorPickerButton = (FloatingActionButton) findViewById(R.id.color_picker_button);
+        colorPickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogWindowManager.showDialog(DialogWindowManager.IDD_COLOR_PICKER);
+            }
+        });
+
+        //clean button
+        FloatingActionButton cleanButton = (FloatingActionButton) findViewById(R.id.clean_button);
+        cleanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myview.cleanScreen();
+            }
+        });
     }
 
     public MyView getMyView() {

@@ -1,4 +1,4 @@
-package cg.computergraphics.tools.enums;
+package cg.computergraphics.tools;
 
 public enum RenderingType {
     SOLID,

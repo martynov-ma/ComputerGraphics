@@ -22,7 +22,7 @@ public class AppSettings {
         bitmapHeight = 2000;
 
         lineDrawingAlgorithm = 0;
-        circleDrawingAlgorithm = 0;
+        circleDrawingAlgorithm = 1;
 
         mosaicSize = 10;
 

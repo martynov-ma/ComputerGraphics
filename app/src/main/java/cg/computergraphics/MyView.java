@@ -20,6 +20,7 @@ import cg.computergraphics.tools.BrzLine;
 import cg.computergraphics.tools.DrawingTool;
 import cg.computergraphics.tools.DDACircle;
 import cg.computergraphics.tools.DDALine;
+import cg.computergraphics.tools.FloodFill;
 
 /**
  * Created by MAX on 03.03.2017.
@@ -53,7 +54,6 @@ public class MyView extends View {
         bitmapScale = 1;
 
         paint = new Paint();
-        paint.setColor(Color.BLACK);
 
         scroller = new Scroller(context);
         gd = new GestureDetector(context, new MyGestureListener());
@@ -96,10 +96,6 @@ public class MyView extends View {
                     case 1:
                         drawingTool = new BrzLine(mainBitmap, fakeBitmap);
                         break;
-
-                    default:
-                        drawingTool = new DDALine(mainBitmap, fakeBitmap);
-                        break;
                 }
                 break;
             case 3:
@@ -110,14 +106,13 @@ public class MyView extends View {
                     case 1:
                         drawingTool = new BrzCircle(mainBitmap, fakeBitmap);
                         break;
-
-                    default:
-                        drawingTool = new DDACircle(mainBitmap, fakeBitmap);
-                        break;
                 }
                 break;
             case 4:
                 drawingTool = new BezierCurve(mainBitmap, fakeBitmap);
+                break;
+            case 5:
+                drawingTool = new FloodFill(mainBitmap);
                 break;
         }
     }
@@ -157,13 +152,12 @@ public class MyView extends View {
         invalidate();
     }
 
-    public Bitmap getMosaic() {
+    public void drawMosaic() {
         int mosaicSize = appSettings.getMosaicSize();
         int bitmapWidth = appSettings.getBitmapWidth();
         int bitmapHeight = appSettings.getBitmapHeight();
 
-        Bitmap mosaicBmp = Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(mosaicBmp);;
+        Canvas canvas = new Canvas(mainBitmap);
         Random r = new Random();
         for (int i = 0; i < bitmapWidth; i += mosaicSize) {
             for (int j = 0; j < bitmapHeight; j += mosaicSize) {
@@ -171,8 +165,6 @@ public class MyView extends View {
                 canvas.drawRect(i, j, i + mosaicSize, j + mosaicSize, paint);
             }
         }
-        paint.setColor(Color.BLACK);
-        return mosaicBmp;
     }
 
 

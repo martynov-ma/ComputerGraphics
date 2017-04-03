@@ -1,13 +1,11 @@
 package cg.computergraphics.tools;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
 import cg.computergraphics.Vertex;
-import cg.computergraphics.tools.enums.RenderingType;
 
 /**
  * Created by MAX on 14.03.2017.

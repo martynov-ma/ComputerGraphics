@@ -123,7 +123,7 @@ class DialogWindowManager {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mainActivity.getMyView().setBitmap(mainActivity.getMyView().getMosaic());
+                        mainActivity.getMyView().drawMosaic();
                     }
                 })
                 .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -318,7 +318,7 @@ class DialogWindowManager {
 
     private void initSetFileNameDialog(AlertDialog dialog) {
         Date dateNow = new Date();
-        SimpleDateFormat formatForDateNow = new SimpleDateFormat("HH_mm_ss");
+        SimpleDateFormat formatForDateNow = new SimpleDateFormat("HH:mm:ss");
         String dateNowStr = formatForDateNow.format(dateNow) + ".bmp";
 
         fileNameTextView = (TextView) dialog.findViewById(R.id.fileNameEdit);

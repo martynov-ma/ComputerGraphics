@@ -3,8 +3,6 @@ package cg.computergraphics.tools;
 import android.graphics.Bitmap;
 import android.view.MotionEvent;
 
-import cg.computergraphics.tools.enums.RenderingType;
-
 /**
  * Created by MAX on 14.03.2017.
  */

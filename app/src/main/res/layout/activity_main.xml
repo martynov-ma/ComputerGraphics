@@ -33,7 +33,18 @@
         android:layout_marginEnd="12dp"
         android:clickable="true"
         app:fabSize="normal"
-        app:srcCompat="@drawable/ic_delete" />
+        app:srcCompat="@drawable/ic_eraser" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/color_picker_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_palette_white"
+        android:layout_marginBottom="7dp"
+        android:layout_above="@+id/clean_button"
+        android:layout_alignEnd="@+id/clean_button" />
 
 
 </RelativeLayout>

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import cg.computergraphics.*;
 import cg.computergraphics.tools.BrzLine;
-import cg.computergraphics.tools.enums.RenderingType;
+import cg.computergraphics.tools.RenderingType;
 import cg.computergraphics.tools.DDALine;
 
 /**

@@ -4,8 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.MotionEvent;
 
-import cg.computergraphics.tools.enums.RenderingType;
-
 /**
  * Created by MAX on 13.03.2017.
  */
