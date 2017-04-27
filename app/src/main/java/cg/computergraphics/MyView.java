@@ -13,14 +13,10 @@ import android.widget.Scroller;
 
 import java.util.Random;
 
-import cg.computergraphics.tools.BezierCurve;
-import cg.computergraphics.tools.Brush;
-import cg.computergraphics.tools.BrzCircle;
-import cg.computergraphics.tools.BrzLine;
-import cg.computergraphics.tools.DrawingTool;
-import cg.computergraphics.tools.DDACircle;
-import cg.computergraphics.tools.DDALine;
-import cg.computergraphics.tools.FloodFill;
+import cg.computergraphics.tools.*;
+import cg.computergraphics.tools.fill.FloodFill;
+import cg.computergraphics.kr.FirstFigure;
+import cg.computergraphics.tools.Polygon;
 
 /**
  * Created by MAX on 03.03.2017.
@@ -30,15 +26,13 @@ public class MyView extends View {
 
     private Bitmap mainBitmap;
     private Bitmap fakeBitmap;
-    private int bitmapScale;
 
     private Paint paint;
     private DrawingTool drawingTool;
     private int selectedTool;
 
-    private GestureDetector gd;
+    private GestureDetector gestureDetector;
     private Scroller scroller;  //считает скроллинг
-    private boolean isScrollEnabled;
     private int scrollX, scrollY;   //координаты скроллинга
 
     private AppSettings appSettings;
@@ -51,28 +45,11 @@ public class MyView extends View {
 
         mainBitmap = Bitmap.createBitmap(appSettings.getBitmapWidth(), appSettings.getBitmapHeight(), Bitmap.Config.ARGB_8888);
         fakeBitmap = Bitmap.createBitmap(appSettings.getBitmapWidth(), appSettings.getBitmapHeight(), Bitmap.Config.ARGB_8888);
-        bitmapScale = 1;
 
         paint = new Paint();
 
         scroller = new Scroller(context);
-        gd = new GestureDetector(context, new MyGestureListener());
-        isScrollEnabled = false;
-    }
-
-    public void setBitmap(Bitmap bitmap) {
-        mainBitmap = bitmap;
-        fakeBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        appSettings.setBitmapWidth(bitmap.getWidth());
-        appSettings.setBitmapHeight(bitmap.getHeight());
-        setDrawingTool(selectedTool);
-        invalidate();
-    }
-
-    public void updateBitmap() {
-        mainBitmap = Bitmap.createBitmap(appSettings.getBitmapWidth(), appSettings.getBitmapHeight(), Bitmap.Config.ARGB_8888);
-        fakeBitmap = Bitmap.createBitmap(appSettings.getBitmapWidth(), appSettings.getBitmapHeight(), Bitmap.Config.ARGB_8888);
-        invalidate();
+        gestureDetector = new GestureDetector(context, new MyGestureListener());
     }
 
     @Override
@@ -99,6 +76,12 @@ public class MyView extends View {
                 }
                 break;
             case 3:
+                drawingTool = new BezierCurve(mainBitmap, fakeBitmap);
+                break;
+            case 4:
+                drawingTool = new FloodFill(mainBitmap);
+                break;
+            case 5:
                 switch (appSettings.getCircleDrawingAlgorithm()) {
                     case 0:
                         drawingTool = new DDACircle(mainBitmap, fakeBitmap);
@@ -108,48 +91,47 @@ public class MyView extends View {
                         break;
                 }
                 break;
-            case 4:
-                drawingTool = new BezierCurve(mainBitmap, fakeBitmap);
+            case 6:
+                drawingTool = new Rectangle(mainBitmap, fakeBitmap);
                 break;
-            case 5:
-                drawingTool = new FloodFill(mainBitmap);
+            case 7:
+                drawingTool = new Polygon(mainBitmap, fakeBitmap);
+                break;
+            case 8:
+                drawingTool = new FirstFigure(mainBitmap, fakeBitmap);
                 break;
         }
     }
 
-    public Bitmap getMainBitmap() {
-        return mainBitmap;
-    }
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
 
-    public DrawingTool getDrawingTool() {
-        return drawingTool;
-    }
-
-    public int getSelectedTool() {
-        return selectedTool;
-    }
-
-    public void setScroll(boolean isEnabled) {
-        isScrollEnabled = isEnabled;
-    }
-
-    public int getBitmapScale() {
-        return bitmapScale;
-    }
-
-    public void setBitmapScale(int n) {
-        bitmapScale = n;
-        setScaleX(n);
-        setScaleY(n);
-        setPivotX(0);
-        setPivotY(0);
+        if (MainActivity.appSettings.isScrollEnabled()) {
+            gestureDetector.onTouchEvent(event);
+        }
+        else {
+            try {
+                drawingTool.onTouch(event);
+            } catch (IllegalArgumentException ignored) {}
+            invalidate();
+        }
+        return true;
     }
 
     public void cleanScreen() {
         mainBitmap.eraseColor(0);
         fakeBitmap.eraseColor(0);
-        if (selectedTool == 4) ((BezierCurve)drawingTool).cleanRefPoints();
+        if (selectedTool == 4) ((BezierCurve) drawingTool).cleanRefPoints();
+        if (selectedTool == 7) ((Polygon) drawingTool).cleanVertices();
         invalidate();
+    }
+
+    public void setBitmapScale(int n) {
+        appSettings.setBitmapScale(n);
+        setScaleX(n);
+        setScaleY(n);
+        setPivotX(0);
+        setPivotY(0);
     }
 
     public void drawMosaic() {
@@ -168,20 +150,33 @@ public class MyView extends View {
     }
 
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-
-        if (isScrollEnabled) {
-            gd.onTouchEvent(event);
-        }
-        else {
-            try {
-                drawingTool.onTouch(event);
-            } catch (IllegalArgumentException ignored) {}
-            invalidate();
-        }
-        return true;
+    public void setBitmap(Bitmap bitmap) {
+        mainBitmap = bitmap;
+        fakeBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        appSettings.setBitmapWidth(bitmap.getWidth());
+        appSettings.setBitmapHeight(bitmap.getHeight());
+        setDrawingTool(selectedTool);
+        invalidate();
     }
+
+    public void updateBitmap() {
+        mainBitmap = Bitmap.createBitmap(appSettings.getBitmapWidth(), appSettings.getBitmapHeight(), Bitmap.Config.ARGB_8888);
+        fakeBitmap = Bitmap.createBitmap(appSettings.getBitmapWidth(), appSettings.getBitmapHeight(), Bitmap.Config.ARGB_8888);
+        invalidate();
+    }
+
+    public Bitmap getMainBitmap() {
+        return mainBitmap;
+    }
+
+    public DrawingTool getDrawingTool() {
+        return drawingTool;
+    }
+
+    public int getSelectedTool() {
+        return selectedTool;
+    }
+
 
     // Вызывается системой для пересчета скроллинга.
     @Override

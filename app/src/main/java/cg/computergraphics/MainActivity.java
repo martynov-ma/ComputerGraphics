@@ -11,9 +11,11 @@ import android.widget.CompoundButton;
 
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.MiniDrawer;
 import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
@@ -53,26 +55,39 @@ public class MainActivity extends AppCompatActivity {
                 .withHeader(R.layout.drawer_header)
                 .withActionBarDrawerToggleAnimated(true)
                 .addDrawerItems(
+                        new SectionDrawerItem().withDivider(false).withName("Tools"),
                         new PrimaryDrawerItem().withIdentifier(1).withName("Brush").withIcon(R.drawable.ic_gesture),
                         new PrimaryDrawerItem().withIdentifier(2).withName("Line").withIcon(R.drawable.ic_vector_line),
-                        new PrimaryDrawerItem().withIdentifier(3).withName("Circle").withIcon(R.drawable.ic_vector_circle2),
-                        new PrimaryDrawerItem().withIdentifier(4).withName("Bezier curve").withIcon(R.drawable.ic_vector_curve),
+                        new PrimaryDrawerItem().withIdentifier(3).withName("Bezier curve").withIcon(R.drawable.ic_vector_curve),
                         new PrimaryDrawerItem().withSelectable(false).withName("Mosaic").withIcon(R.drawable.ic_grid)
                                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                                     @Override
                                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                                         dialogWindowManager.showDialog(DialogWindowManager.IDD_MOSAIC);
-                                        return true;
+                                        return false;
                                     }
                                 }),
-                        new DividerDrawerItem(),
-                        new PrimaryDrawerItem().withIdentifier(5).withName("Fill").withIcon(R.drawable.ic_fill),
+                        new PrimaryDrawerItem().withIdentifier(4).withName("Fill").withIcon(R.drawable.ic_fill),
+
+                        new SectionDrawerItem().withDivider(true).withName("Figures"),
+                        new PrimaryDrawerItem().withIdentifier(5).withName("Circle").withIcon(R.drawable.ic_vector_circle2),
+                        new PrimaryDrawerItem().withIdentifier(6).withName("Rectangle").withIcon(R.drawable.ic_rectangle),
+                        new PrimaryDrawerItem().withIdentifier(7).withName("Polygon").withIcon(R.drawable.ic_polygon),
+                        new PrimaryDrawerItem().withIdentifier(8).withName("KR Figure").withIcon(R.drawable.ic_figure),
+                        new SwitchDrawerItem().withSelectable(false).withName("With filling").withIcon(R.drawable.ic_fill)
+                                .withOnCheckedChangeListener(new OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
+                                        appSettings.setFill(isChecked);
+                                        sideBar.closeDrawer();
+                                    }
+                                }),
                         new DividerDrawerItem(),
                         new SwitchDrawerItem().withSelectable(false).withName("Scroll").withIcon(R.drawable.ic_meteor)
                                 .withOnCheckedChangeListener(new OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
-                                        myview.setScroll(isChecked);
+                                        appSettings.setScroll(isChecked);
                                         sideBar.closeDrawer();
                                     }
                                 })
@@ -80,7 +95,10 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        if (drawerItem.isSelected()) myview.setDrawingTool((int) drawerItem.getIdentifier());
+                        if (drawerItem.isSelected()) {
+                            myview.getDrawingTool().transferToMainBitmap();
+                            myview.setDrawingTool((int) drawerItem.getIdentifier());
+                        }
                         return false;
                     }
                 })

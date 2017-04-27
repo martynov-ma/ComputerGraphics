@@ -1,4 +1,4 @@
-package cg.computergraphics.tools;
+package cg.computergraphics.tools.fill;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import java.util.Stack;
 
 import cg.computergraphics.MainActivity;
+import cg.computergraphics.tools.DrawingTool;
 
 
 /**
@@ -34,7 +35,7 @@ public class FloodFill extends DrawingTool {
         fillColor = color;
     }
 
-    private void fillBackground(int x, int y) {
+    public void fillBackground(int x, int y) {
         Bitmap mainBitmap = super.getMainBitmap();
         int bitmapWidth = mainBitmap.getWidth();
         int bitmapHeight = mainBitmap.getHeight();

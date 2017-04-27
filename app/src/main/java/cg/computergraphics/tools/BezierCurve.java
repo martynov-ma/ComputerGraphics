@@ -19,7 +19,6 @@ public class BezierCurve extends DrawingTool {
     public BezierCurve(Bitmap mainBitmap, Bitmap fakeBitmap) {
         super(mainBitmap, fakeBitmap);
         refPoints = new ArrayList<>();
-
         painter = new BrzLine(mainBitmap, null);
     }
 
@@ -86,12 +85,17 @@ public class BezierCurve extends DrawingTool {
                     drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.ERASE);
                     refPoints.set(refPoints.size() - 1, new Vertex(x, y));
                     drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.SOLID);
-                } else if (refPoints.size() > 2){
+                } else if (refPoints.size() > 2) {
                     drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.ERASE);
                     refPoints.set(refPoints.size() - 2, new Vertex(x, y));
                     drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.SOLID);
                 }
                 break;
         }
+    }
+
+    @Override
+    public void transferToMainBitmap() {
+        drawBezierCurve(refPoints, super.getMainBitmap(), RenderingType.SOLID);
     }
 }

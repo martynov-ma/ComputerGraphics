@@ -14,17 +14,17 @@ public abstract class DrawingTool {
     private Bitmap fakeBitmap;
     private int color;
 
-    DrawingTool(Bitmap mainBitmap, Bitmap fakeBitmap) {
+    public DrawingTool(Bitmap mainBitmap, Bitmap fakeBitmap) {
         this.mainBitmap = mainBitmap;
         this.fakeBitmap = fakeBitmap;
         color = MainActivity.appSettings.getDrawingColor();
     }
 
-    Bitmap getMainBitmap() {
+    public Bitmap getMainBitmap() {
         return mainBitmap;
     }
 
-    Bitmap getFakeBitmap() {
+    public Bitmap getFakeBitmap() {
         return fakeBitmap;
     }
 
@@ -35,6 +35,9 @@ public abstract class DrawingTool {
     public void setColor(int color) {
         this.color = color;
     }
+
+    public void transferToMainBitmap() {}
+
 
     public abstract void onTouch(MotionEvent motionEvent);
 }

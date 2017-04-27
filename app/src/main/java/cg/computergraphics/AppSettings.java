@@ -9,6 +9,7 @@ import android.graphics.Color;
 public class AppSettings {
     private int bitmapWidth;
     private int bitmapHeight;
+    private int bitmapScale;
 
     private int lineDrawingAlgorithm;
     private int circleDrawingAlgorithm;
@@ -17,9 +18,13 @@ public class AppSettings {
 
     private int drawingColor;
 
+    private boolean isScrollEnabled;
+    private boolean isFillEnabled;
+
     AppSettings() {
         bitmapWidth = 2000;
         bitmapHeight = 2000;
+        bitmapScale = 1;
 
         lineDrawingAlgorithm = 0;
         circleDrawingAlgorithm = 1;
@@ -27,6 +32,9 @@ public class AppSettings {
         mosaicSize = 10;
 
         drawingColor = Color.BLACK;
+
+        isScrollEnabled = false;
+        isFillEnabled = false;
     }
 
     int getBitmapWidth() {
@@ -43,6 +51,14 @@ public class AppSettings {
 
     void setBitmapHeight(int bitmapHeight) {
         this.bitmapHeight = bitmapHeight;
+    }
+
+    public int getBitmapScale() {
+        return bitmapScale;
+    }
+
+    public void setBitmapScale(int bitmapScale) {
+        this.bitmapScale = bitmapScale;
     }
 
 
@@ -79,4 +95,22 @@ public class AppSettings {
     public void setDrawingColor(int drawingColor) {
         this.drawingColor = drawingColor;
     }
+
+
+    public boolean isScrollEnabled() {
+        return isScrollEnabled;
+    }
+
+    public void setScroll(boolean isEnabled) {
+        isScrollEnabled = isEnabled;
+    }
+
+    public boolean isFillEnabled() {
+        return isFillEnabled;
+    }
+
+    public void setFill(boolean isEnabled) {
+        isFillEnabled = isEnabled;
+    }
+
 }

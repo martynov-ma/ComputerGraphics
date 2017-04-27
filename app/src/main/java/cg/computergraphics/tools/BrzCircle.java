@@ -3,11 +3,14 @@ package cg.computergraphics.tools;
 import android.graphics.Bitmap;
 import android.view.MotionEvent;
 
+import cg.computergraphics.MainActivity;
+
 /**
  * Created by MAX on 14.03.2017.
  */
 
 public class BrzCircle extends DrawingTool {
+    private BrzLine painter;
     private int x1;
     private int y1;
     private int x2;
@@ -15,9 +18,10 @@ public class BrzCircle extends DrawingTool {
 
     public BrzCircle(Bitmap mainBitmap, Bitmap fakeBitmap) {
         super(mainBitmap, fakeBitmap);
+        painter = new BrzLine(mainBitmap, fakeBitmap);
     }
 
-    private void drawCircleBrz(int x1, int y1, int x2, int y2, Bitmap bitmap, RenderingType renderingType) {
+    public void drawCircleBrz(int x1, int y1, int x2, int y2, Bitmap bitmap, RenderingType renderingType) {
 
         int a = Math.abs(x2 - x1);
         int b = Math.abs(y2 - y1);
@@ -50,6 +54,10 @@ public class BrzCircle extends DrawingTool {
         bitmap.setPixel(centerX + R, centerY, color);
         bitmap.setPixel(centerX - R, centerY, color);
 
+        if (MainActivity.appSettings.isFillEnabled()) {
+            painter.drawBrzLine(centerX + R, centerY, centerX - R, centerY, bitmap, renderingType);
+        }
+
         while(x <= y) {
 
             if(f > 0) {
@@ -68,6 +76,13 @@ public class BrzCircle extends DrawingTool {
             bitmap.setPixel(centerX - y, centerY + x, color);
             bitmap.setPixel(centerX + y, centerY - x, color);
             bitmap.setPixel(centerX - y, centerY - x, color);
+
+            if (MainActivity.appSettings.isFillEnabled()) {
+                painter.drawBrzLine(centerX + x, centerY + y, centerX - x, centerY + y, bitmap, renderingType);
+                painter.drawBrzLine(centerX + y, centerY + x, centerX - y, centerY + x, bitmap, renderingType);
+                painter.drawBrzLine(centerX + y, centerY - x, centerX - y, centerY - x, bitmap, renderingType);
+                painter.drawBrzLine(centerX + x, centerY - y, centerX - x, centerY - y, bitmap, renderingType);
+            }
         }
     }
 

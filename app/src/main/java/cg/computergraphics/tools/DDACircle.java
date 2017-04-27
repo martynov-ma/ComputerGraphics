@@ -42,7 +42,7 @@ public class DDACircle extends DrawingTool {
 
         double upperBound = R / Math.sqrt(2);
         for(int x = 0; x < upperBound; x++) {
-            y = (int) Math.round(Math.sqrt(R * R - x * x));
+            y = (int) Math.sqrt(R * R - x * x);
 
             bitmap.setPixel(centerX + x, centerY + y, color);
             bitmap.setPixel(centerX + y, centerY + x, color);

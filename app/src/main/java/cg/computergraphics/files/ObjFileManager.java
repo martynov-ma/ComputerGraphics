@@ -48,7 +48,7 @@ public class ObjFileManager {
         try {
             // открываем поток для чтения
             BufferedReader br = new BufferedReader(new FileReader(sdFile));
-            String line = "";
+            String line;
             // читаем содержимое
             while ((line = br.readLine()) != null) {
                 //System.out.println(line);
@@ -85,10 +85,10 @@ public class ObjFileManager {
         for (int i = 0; i < faces.size() - 1; i++) {
             for (int j = 0; j < 3; j++) {
                 painter.drawDDALine(vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getX(),
-                                      vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getY(),
-                                      vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getX(),
-                                      vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getY(),
-                                      bitmap, RenderingType.SOLID);
+                                    vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getY(),
+                                    vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getX(),
+                                    vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getY(),
+                                    bitmap, RenderingType.SOLID);
             }
         }
     }
@@ -99,10 +99,10 @@ public class ObjFileManager {
         for (int i = 0; i < faces.size() - 1; i++) {
             for (int j = 0; j < 3; j++) {
                 painter.drawBrzLine(vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getX(),
-                        vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getY(),
-                        vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getX(),
-                        vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getY(),
-                        bitmap, RenderingType.SOLID);
+                                    vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getY(),
+                                    vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getX(),
+                                    vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getY(),
+                                    bitmap, RenderingType.SOLID);
             }
         }
     }

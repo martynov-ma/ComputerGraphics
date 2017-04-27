@@ -244,9 +244,9 @@ class DialogWindowManager {
                 .colorMode(ColorMode.RGB)
                 .onColorSelected(new ColorSelectListener() {
                     @Override
-                    public void onColorSelected(@ColorInt int i) {
-                        mainActivity.getMyView().getDrawingTool().setColor(i);
-                        MainActivity.appSettings.setDrawingColor(i);
+                    public void onColorSelected(@ColorInt int color) {
+                        mainActivity.getMyView().getDrawingTool().setColor(color);
+                        MainActivity.appSettings.setDrawingColor(color);
                     }
                 })
                 .create()
@@ -260,10 +260,10 @@ class DialogWindowManager {
 
     private void initSetScaleDialog(AlertDialog dialog) {
         scaleTextView = (TextView) dialog.findViewById(R.id.textScale);
-        scaleTextView.setText(String.valueOf(mainActivity.getMyView().getBitmapScale()));
+        scaleTextView.setText(String.valueOf(MainActivity.appSettings.getBitmapScale()));
 
         scaleSeekBar = (SeekBar) dialog.findViewById(R.id.seekBar);
-        scaleSeekBar.setProgress(mainActivity.getMyView().getBitmapScale() - 1);
+        scaleSeekBar.setProgress(MainActivity.appSettings.getBitmapScale() - 1);
         scaleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
