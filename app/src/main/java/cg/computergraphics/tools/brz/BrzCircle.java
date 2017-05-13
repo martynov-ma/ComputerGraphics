@@ -1,16 +1,17 @@
-package cg.computergraphics.tools;
+package cg.computergraphics.tools.brz;
 
 import android.graphics.Bitmap;
 import android.view.MotionEvent;
 
 import cg.computergraphics.MainActivity;
+import cg.computergraphics.tools.DrawingTool;
+import cg.computergraphics.tools.RenderingType;
 
 /**
  * Created by MAX on 14.03.2017.
  */
 
 public class BrzCircle extends DrawingTool {
-    private BrzLine painter;
     private int x1;
     private int y1;
     private int x2;
@@ -18,7 +19,6 @@ public class BrzCircle extends DrawingTool {
 
     public BrzCircle(Bitmap mainBitmap, Bitmap fakeBitmap) {
         super(mainBitmap, fakeBitmap);
-        painter = new BrzLine(mainBitmap, fakeBitmap);
     }
 
     public void drawCircleBrz(int x1, int y1, int x2, int y2, Bitmap bitmap, RenderingType renderingType) {
@@ -55,7 +55,9 @@ public class BrzCircle extends DrawingTool {
         bitmap.setPixel(centerX - R, centerY, color);
 
         if (MainActivity.appSettings.isFillEnabled()) {
-            painter.drawBrzLine(centerX + R, centerY, centerX - R, centerY, bitmap, renderingType);
+            for (int dx = centerX - R; dx < centerX + R; dx++) {
+                bitmap.setPixel(dx, centerY, color);
+            }
         }
 
         while(x <= y) {
@@ -78,10 +80,14 @@ public class BrzCircle extends DrawingTool {
             bitmap.setPixel(centerX - y, centerY - x, color);
 
             if (MainActivity.appSettings.isFillEnabled()) {
-                painter.drawBrzLine(centerX + x, centerY + y, centerX - x, centerY + y, bitmap, renderingType);
-                painter.drawBrzLine(centerX + y, centerY + x, centerX - y, centerY + x, bitmap, renderingType);
-                painter.drawBrzLine(centerX + y, centerY - x, centerX - y, centerY - x, bitmap, renderingType);
-                painter.drawBrzLine(centerX + x, centerY - y, centerX - x, centerY - y, bitmap, renderingType);
+                for (int dx = centerX - x; dx < centerX + x; dx++) {
+                    bitmap.setPixel(dx, centerY + y, color);
+                    bitmap.setPixel(dx, centerY - y, color);
+                }
+                for (int dx = centerX - y; dx < centerX + y; dx++) {
+                    bitmap.setPixel(dx, centerY + x, color);
+                    bitmap.setPixel(dx, centerY - x, color);
+                }
             }
         }
     }

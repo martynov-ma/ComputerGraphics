@@ -2,6 +2,7 @@ package cg.computergraphics.files;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Environment;
 
 import java.io.BufferedReader;
@@ -12,9 +13,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import cg.computergraphics.*;
-import cg.computergraphics.tools.BrzLine;
+import cg.computergraphics.tools.brz.BrzLine;
+import cg.computergraphics.tools.Polygon;
 import cg.computergraphics.tools.RenderingType;
-import cg.computergraphics.tools.DDALine;
+import cg.computergraphics.tools.dda.DDALine;
 
 /**
  * Created by MAX on 08.03.2017.
@@ -22,15 +24,19 @@ import cg.computergraphics.tools.DDALine;
 
 public class ObjFileManager {
 
-    private Bitmap bitmap;
+    private Bitmap mainBitmap;
+    private Bitmap fakeBitmap;
     private ArrayList<Vertex> vertices;
     private ArrayList<String[]> faces;
+    private ArrayList<Point> triangleVertices;
 
     public ObjFileManager(MainActivity mainActivity) {
-        bitmap = mainActivity.getMyView().getMainBitmap();
+        mainBitmap = mainActivity.getMyView().getMainBitmap();
+        fakeBitmap = mainActivity.getMyView().getFakeBitmap();
 
         vertices = new ArrayList<>();
         faces = new ArrayList<>();
+        triangleVertices = new ArrayList<>();
     }
 
     public boolean readFile(String fileName) {
@@ -80,7 +86,22 @@ public class ObjFileManager {
     }
 
     public void drawObjDDA() {
-        DDALine painter = new DDALine(bitmap, null);
+        if (MainActivity.appSettings.isObjFilling()) {
+            Polygon polygon = new Polygon(mainBitmap, fakeBitmap);
+            polygon.setColor(MainActivity.appSettings.getDrawingColor());
+            for (int i = 0; i < faces.size() - 1; i++) {
+                for (int j = 0; j < 3; j++) {
+                    triangleVertices.add(new Point((int) vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getX(),
+                                                   (int) vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getY()));
+                }
+                if (MainActivity.appSettings.isObjRandomColor()) {
+                    polygon.setColor(Color.rgb((int) (Math.random() * 1000) % 255, (int) (Math.random() * 1000) % 255, (int) (Math.random() * 1000) % 255));
+                }
+                polygon.fillPolygon(triangleVertices, mainBitmap);
+                triangleVertices.clear();
+            }
+        }
+        DDALine painter = new DDALine(mainBitmap, fakeBitmap);
         painter.setColor(Color.BLACK);
         for (int i = 0; i < faces.size() - 1; i++) {
             for (int j = 0; j < 3; j++) {
@@ -88,13 +109,28 @@ public class ObjFileManager {
                                     vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getY(),
                                     vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getX(),
                                     vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getY(),
-                                    bitmap, RenderingType.SOLID);
+                                    mainBitmap, RenderingType.SOLID);
             }
         }
     }
 
     public void drawObjBrz() {
-        BrzLine painter = new BrzLine(bitmap, null);
+        if (MainActivity.appSettings.isObjFilling()) {
+            Polygon polygon = new Polygon(mainBitmap, fakeBitmap);
+            polygon.setColor(MainActivity.appSettings.getDrawingColor());
+            for (int i = 0; i < faces.size() - 1; i++) {
+                for (int j = 0; j < 3; j++) {
+                    triangleVertices.add(new Point((int) vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getX(),
+                            (int) vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getY()));
+                }
+                if (MainActivity.appSettings.isObjRandomColor()) {
+                    polygon.setColor(Color.rgb((int) (Math.random() * 1000) % 255, (int) (Math.random() * 1000) % 255, (int) (Math.random() * 1000) % 255));
+                }
+                polygon.fillPolygon(triangleVertices, mainBitmap);
+                triangleVertices.clear();
+            }
+        }
+        BrzLine painter = new BrzLine(mainBitmap, fakeBitmap);
         painter.setColor(Color.BLACK);
         for (int i = 0; i < faces.size() - 1; i++) {
             for (int j = 0; j < 3; j++) {
@@ -102,7 +138,7 @@ public class ObjFileManager {
                                     vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getY(),
                                     vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getX(),
                                     vertices.get(Integer.parseInt(faces.get(i)[(j + 1) % 3]) - 1).getY(),
-                                    bitmap, RenderingType.SOLID);
+                                    mainBitmap, RenderingType.SOLID);
             }
         }
     }

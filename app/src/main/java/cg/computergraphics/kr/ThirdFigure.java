@@ -5,7 +5,7 @@ import android.view.MotionEvent;
 
 import cg.computergraphics.MainActivity;
 import cg.computergraphics.Vertex;
-import cg.computergraphics.tools.DDALine;
+import cg.computergraphics.tools.dda.DDALine;
 import cg.computergraphics.tools.DrawingTool;
 import cg.computergraphics.tools.fill.FloodFill;
 import cg.computergraphics.tools.RenderingType;
@@ -94,5 +94,12 @@ public class ThirdFigure extends DrawingTool {
                 }
                 break;
         }
+    }
+
+    @Override
+    public void setColor(int color) {
+        super.setColor(color);
+        painter.setColor(color);
+        filler.setColor(color);
     }
 }

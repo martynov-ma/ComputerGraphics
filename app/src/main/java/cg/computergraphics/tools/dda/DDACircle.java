@@ -1,7 +1,10 @@
-package cg.computergraphics.tools;
+package cg.computergraphics.tools.dda;
 
 import android.graphics.Bitmap;
 import android.view.MotionEvent;
+
+import cg.computergraphics.tools.DrawingTool;
+import cg.computergraphics.tools.RenderingType;
 
 /**
  * Created by MAX on 14.03.2017.

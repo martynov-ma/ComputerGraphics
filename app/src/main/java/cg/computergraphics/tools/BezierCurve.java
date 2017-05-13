@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import java.util.ArrayList;
 
 import cg.computergraphics.Vertex;
+import cg.computergraphics.tools.brz.BrzLine;
 
 /**
  * Created by MAX on 14.03.2017.
@@ -36,7 +37,9 @@ public class BezierCurve extends DrawingTool {
         refPoints.clear();
     }
 
-    private void drawBezierCurve(ArrayList<Vertex> refPoints, Bitmap bitmap, RenderingType renderingType) {
+    private void drawBezierCurve(ArrayList<Vertex> refPoints, Bitmap bitmap) {
+        super.getFakeBitmap().eraseColor(0);
+
         int m = refPoints.size();
         float x1, y1, x2, y2, newPointX, newPointY;
         float oldX = refPoints.get(0).getX();
@@ -56,7 +59,7 @@ public class BezierCurve extends DrawingTool {
                     temp.set(j, newPoint);
                 }
             }
-            painter.drawBrzLine(oldX, oldY, temp.get(0).getX(), temp.get(0).getY(), bitmap, renderingType);
+            painter.drawBrzLine(oldX, oldY, temp.get(0).getX(), temp.get(0).getY(), bitmap, RenderingType.SOLID);
             oldX = temp.get(0).getX();
             oldY = temp.get(0).getY();
         }
@@ -72,23 +75,20 @@ public class BezierCurve extends DrawingTool {
                 if (refPoints.size() == 0) {
                     refPoints.add(new Vertex(x, y));
                 } else if (refPoints.size() >= 2) {
-                    drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.ERASE);
                     refPoints.add(refPoints.size() - 1, new Vertex(x, y));
-                    drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.SOLID);
+                    drawBezierCurve(refPoints, super.getFakeBitmap());
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (refPoints.size() < 2) {
                     refPoints.add(new Vertex(x, y));
-                    drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.SOLID);
+                    drawBezierCurve(refPoints, super.getFakeBitmap());
                 } else if (refPoints.size() == 2) {
-                    drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.ERASE);
                     refPoints.set(refPoints.size() - 1, new Vertex(x, y));
-                    drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.SOLID);
+                    drawBezierCurve(refPoints, super.getFakeBitmap());
                 } else if (refPoints.size() > 2) {
-                    drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.ERASE);
                     refPoints.set(refPoints.size() - 2, new Vertex(x, y));
-                    drawBezierCurve(refPoints, super.getFakeBitmap(), RenderingType.SOLID);
+                    drawBezierCurve(refPoints, super.getFakeBitmap());
                 }
                 break;
         }
@@ -96,6 +96,7 @@ public class BezierCurve extends DrawingTool {
 
     @Override
     public void transferToMainBitmap() {
-        drawBezierCurve(refPoints, super.getMainBitmap(), RenderingType.SOLID);
+        if (refPoints.size() != 0)
+            drawBezierCurve(refPoints, super.getMainBitmap());
     }
 }

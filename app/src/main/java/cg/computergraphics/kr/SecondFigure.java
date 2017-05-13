@@ -5,8 +5,8 @@ import android.graphics.Color;
 import android.view.MotionEvent;
 
 import cg.computergraphics.MainActivity;
-import cg.computergraphics.tools.BrzCircle;
-import cg.computergraphics.tools.BrzLine;
+import cg.computergraphics.tools.brz.BrzCircle;
+import cg.computergraphics.tools.brz.BrzLine;
 import cg.computergraphics.tools.DrawingTool;
 import cg.computergraphics.tools.fill.FloodFill;
 import cg.computergraphics.tools.RenderingType;
@@ -17,9 +17,9 @@ import cg.computergraphics.tools.RenderingType;
 
 public class SecondFigure extends DrawingTool {
 
-    BrzCircle brz;
-    BrzLine line;
-    FloodFill ff;
+    private BrzCircle brz;
+    private BrzLine line;
+    private FloodFill ff;
     private int x1;
     private int y1;
     private int x2;

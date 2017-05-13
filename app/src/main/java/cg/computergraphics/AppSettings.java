@@ -11,8 +11,13 @@ public class AppSettings {
     private int bitmapHeight;
     private int bitmapScale;
 
+    private int defaultTool;
+
     private int lineDrawingAlgorithm;
     private int circleDrawingAlgorithm;
+
+    private boolean isObjFilling;
+    private boolean isObjRandomColor;
 
     private int mosaicSize;
 
@@ -21,13 +26,21 @@ public class AppSettings {
     private boolean isScrollEnabled;
     private boolean isFillEnabled;
 
+    private boolean isLineColorApprox;
+    private boolean isPolygonColorApprox;
+
     AppSettings() {
         bitmapWidth = 2000;
         bitmapHeight = 2000;
         bitmapScale = 1;
 
+        defaultTool = 1;
+
         lineDrawingAlgorithm = 0;
         circleDrawingAlgorithm = 1;
+
+        isObjFilling = true;
+        isObjRandomColor = true;
 
         mosaicSize = 10;
 
@@ -35,6 +48,9 @@ public class AppSettings {
 
         isScrollEnabled = false;
         isFillEnabled = false;
+
+        isLineColorApprox = false;
+        isPolygonColorApprox = false;
     }
 
     int getBitmapWidth() {
@@ -53,12 +69,17 @@ public class AppSettings {
         this.bitmapHeight = bitmapHeight;
     }
 
+
     public int getBitmapScale() {
         return bitmapScale;
     }
 
     public void setBitmapScale(int bitmapScale) {
         this.bitmapScale = bitmapScale;
+    }
+
+    public int getDefaultTool() {
+        return defaultTool;
     }
 
 
@@ -76,6 +97,23 @@ public class AppSettings {
 
     void setCircleDrawingAlgorithm(int algorithmId) {
         circleDrawingAlgorithm = algorithmId;
+    }
+
+
+    public boolean isObjFilling() {
+        return isObjFilling;
+    }
+
+    public void setObjFilling(boolean objFilling) {
+        this.isObjFilling = objFilling;
+    }
+
+    public boolean isObjRandomColor() {
+        return isObjRandomColor;
+    }
+
+    public void setObjRandomColor(boolean objRandomColor) {
+        isObjRandomColor = objRandomColor;
     }
 
 
@@ -113,4 +151,20 @@ public class AppSettings {
         isFillEnabled = isEnabled;
     }
 
+
+    public boolean isLineColorApprox() {
+        return isLineColorApprox;
+    }
+
+    public void setLineColorApprox(boolean lineColorApprox) {
+        isLineColorApprox = lineColorApprox;
+    }
+
+    public boolean isPolygonColorApprox() {
+        return isPolygonColorApprox;
+    }
+
+    public void setPolygonColorApprox(boolean isEnabled) {
+        isPolygonColorApprox = isEnabled;
+    }
 }

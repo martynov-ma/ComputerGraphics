@@ -5,4 +5,9 @@
         <item>DDA</item>
         <item>Bresenham</item>
     </string-array>
+
+    <string-array name="obj_fill">
+        <item>random</item>
+        <item>same</item>
+    </string-array>
 </resources>

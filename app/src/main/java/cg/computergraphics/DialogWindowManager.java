@@ -6,6 +6,7 @@ import android.support.annotation.ColorInt;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -62,6 +63,10 @@ class DialogWindowManager {
     //set file name dialog content
     private TextView fileNameTextView;
     private BmpFileWriter bmpFileWriter;
+
+    //obj settings content
+    private CheckBox objIsFilling;
+    private CheckBox objIsRandomColor;
 
 
     DialogWindowManager(MainActivity mainActivity) {
@@ -142,7 +147,7 @@ class DialogWindowManager {
         prepareView(setSettingsView);
 
         builder = new AlertDialog.Builder(mainActivity);
-        builder.setTitle("AppSettings")
+        builder.setTitle("Settings")
                 .setView(setSettingsView)
                 .setPositiveButton("APPLY", new DialogInterface.OnClickListener() {
                     @Override
@@ -175,21 +180,7 @@ class DialogWindowManager {
                         if (Objects.equals(mChosenFile.substring(dot + 1).toLowerCase(), "obj")) {
                             objFileManager = new ObjFileManager(mainActivity);
                             objFileManager.readFile(mChosenFile);
-                            long startTime, timeSpent;
-                            switch (MainActivity.appSettings.getLineDrawingAlgorithm()) {
-                                case 0:
-                                    startTime = System.currentTimeMillis();
-                                    objFileManager.drawObjDDA();
-                                    timeSpent = System.currentTimeMillis() - startTime;
-                                    Toast.makeText(mainActivity, "DDA\ntime: " + (double) timeSpent / 1000 + " sec.", Toast.LENGTH_LONG).show();
-                                    break;
-                                case 1:
-                                    startTime = System.currentTimeMillis();
-                                    objFileManager.drawObjBrz();
-                                    timeSpent = System.currentTimeMillis() - startTime;
-                                    Toast.makeText(mainActivity, "BRZ\ntime: " + (double) timeSpent / 1000 + " sec.", Toast.LENGTH_LONG).show();
-                                    break;
-                            }
+                            showObjSettingsDialog();
                         } else if (Objects.equals(mChosenFile.substring(dot + 1).toLowerCase(), "bmp")) {
                             bmpFileReader = new BmpFileReader(mainActivity);
                             bmpFileReader.readFile(mChosenFile);
@@ -253,6 +244,34 @@ class DialogWindowManager {
                 .show(mainActivity.getSupportFragmentManager(), "ChromaDialog");
     }
 
+    private void showObjSettingsDialog() {
+        View setObjSettingsView = mainActivity.getLayoutInflater().inflate(R.layout.ad_obj_settings_content, null);
+        prepareView(setObjSettingsView);
+
+        builder = new AlertDialog.Builder(mainActivity);
+        builder.setTitle("Obj render settings")
+                .setView(setObjSettingsView)
+                .setPositiveButton("DRAW", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        applyObjSettings();
+                        dialog.cancel();
+                        drawObj();
+                    }
+                })
+                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+
+        dialog = builder.create();
+        dialog.show();
+        initObjSettingsDialog(dialog);
+    }
+
+
     private void prepareView(View view) {
         if (view.getParent() != null) ((ViewGroup) view.getParent()).removeView(view);
     }
@@ -314,6 +333,43 @@ class DialogWindowManager {
         mainActivity.getMyView().setDrawingTool(mainActivity.getMyView().getSelectedTool());
 
         appSettings.setMosaicSize(Integer.parseInt(mosaicSize.getText().toString()));
+    }
+
+
+    private void initObjSettingsDialog(AlertDialog dialog) {
+        objIsFilling = (CheckBox) dialog.findViewById(R.id.objIsFilling);
+        objIsFilling.setChecked(MainActivity.appSettings.isObjFilling());
+
+        objIsRandomColor = (CheckBox) dialog.findViewById(R.id.objIsRandomFilling);
+        objIsRandomColor.setChecked(MainActivity.appSettings.isObjRandomColor());
+    }
+
+    private void applyObjSettings() {
+        MainActivity.appSettings.setObjFilling(objIsFilling.isChecked());
+        MainActivity.appSettings.setObjRandomColor(objIsRandomColor.isChecked());
+    }
+
+    private void drawObj() {
+        long startTime, timeSpent;
+        switch (MainActivity.appSettings.getLineDrawingAlgorithm()) {
+            case 0:
+                startTime = System.currentTimeMillis();
+                new Thread(new Runnable() {
+                    public void run() {
+                        objFileManager.drawObjDDA();
+                    }
+                }).start();
+                //objFileManager.drawObjDDA();
+                timeSpent = System.currentTimeMillis() - startTime;
+                Toast.makeText(mainActivity, "DDA\ntime: " + (double) timeSpent / 1000 + " sec.", Toast.LENGTH_LONG).show();
+                break;
+            case 1:
+                startTime = System.currentTimeMillis();
+                objFileManager.drawObjBrz();
+                timeSpent = System.currentTimeMillis() - startTime;
+                Toast.makeText(mainActivity, "BRZ\ntime: " + (double) timeSpent / 1000 + " sec.", Toast.LENGTH_LONG).show();
+                break;
+        }
     }
 
     private void initSetFileNameDialog(AlertDialog dialog) {

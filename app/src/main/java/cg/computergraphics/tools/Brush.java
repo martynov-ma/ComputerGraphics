@@ -3,6 +3,8 @@ package cg.computergraphics.tools;
 import android.graphics.Bitmap;
 import android.view.MotionEvent;
 
+import cg.computergraphics.tools.dda.DDALine;
+
 /**
  * Created by MAX on 14.03.2017.
  */

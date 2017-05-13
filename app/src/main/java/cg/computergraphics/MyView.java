@@ -14,6 +14,10 @@ import android.widget.Scroller;
 import java.util.Random;
 
 import cg.computergraphics.tools.*;
+import cg.computergraphics.tools.brz.BrzCircle;
+import cg.computergraphics.tools.brz.BrzLine;
+import cg.computergraphics.tools.dda.DDACircle;
+import cg.computergraphics.tools.dda.DDALine;
 import cg.computergraphics.tools.fill.FloodFill;
 import cg.computergraphics.kr.FirstFigure;
 import cg.computergraphics.tools.Polygon;
@@ -56,6 +60,7 @@ public class MyView extends View {
     public void onDraw(Canvas canvas) {
         canvas.drawBitmap(mainBitmap, 0, 0, paint);
         canvas.drawBitmap(fakeBitmap, 0, 0, paint);
+        invalidate();
     }
 
     public void setDrawingTool(int selectedTool) {
@@ -121,7 +126,7 @@ public class MyView extends View {
     public void cleanScreen() {
         mainBitmap.eraseColor(0);
         fakeBitmap.eraseColor(0);
-        if (selectedTool == 4) ((BezierCurve) drawingTool).cleanRefPoints();
+        if (selectedTool == 3) ((BezierCurve) drawingTool).cleanRefPoints();
         if (selectedTool == 7) ((Polygon) drawingTool).cleanVertices();
         invalidate();
     }
@@ -167,6 +172,10 @@ public class MyView extends View {
 
     public Bitmap getMainBitmap() {
         return mainBitmap;
+    }
+
+    public Bitmap getFakeBitmap() {
+        return fakeBitmap;
     }
 
     public DrawingTool getDrawingTool() {

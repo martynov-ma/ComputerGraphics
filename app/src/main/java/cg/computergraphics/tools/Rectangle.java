@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.view.MotionEvent;
 
 import cg.computergraphics.MainActivity;
+import cg.computergraphics.tools.brz.BrzLine;
 
 /**
  * Created by MAX on 27.04.2017.
@@ -24,25 +25,42 @@ public class Rectangle extends DrawingTool {
 
     public void drawRectangle(int x1, int y1, int x2, int y2, Bitmap bitmap, RenderingType renderingType) {
 
-        painter.drawBrzLine(x1, y1, x2, y1, bitmap, renderingType);
-        painter.drawBrzLine(x2, y1, x2, y2, bitmap, renderingType);
-        painter.drawBrzLine(x2, y2, x1, y2, bitmap, renderingType);
-        painter.drawBrzLine(x1, y2, x1, y1, bitmap, renderingType);
+        int temp;
+        if (y1 > y2) {
+            temp = y1;
+            y1 = y2;
+            y2 = temp;
+        }
+        if (x1 > x2) {
+            temp = x1;
+            x1 = x2;
+            x2 = temp;
+        }
+
+        int color = 0;
+        switch (renderingType) {
+            case SOLID:
+                color = super.getColor();
+                break;
+            case ERASE:
+                color = 0;
+                break;
+        }
+
+        for (int x = x1; x <= x2; x++) {
+            bitmap.setPixel(x, y1, color);
+            bitmap.setPixel(x, y2, color);
+        }
+        for (int y = y1; y <= y2; y++) {
+            bitmap.setPixel(x1, y, color);
+            bitmap.setPixel(x2, y, color);
+        }
 
         if (MainActivity.appSettings.isFillEnabled()) {
-            fillRectangle(x1, y1, x2, y2, bitmap, renderingType);
-        }
-    }
-
-    private void fillRectangle(int x1, int y1, int x2, int y2, Bitmap bitmap, RenderingType renderingType){
-
-        if (y1 < y2) {
-            for (int y = y1; y <= y2; y++) {
-                painter.drawBrzLine(x1, y, x2, y, bitmap, renderingType);
-            }
-        } else {
-            for (int y = y2; y <= y1; y++) {
-                painter.drawBrzLine(x1, y, x2, y, bitmap, renderingType);
+            for (int y = y1; y < y2; y++) {
+                for (int x = x1; x < x2; x++) {
+                    bitmap.setPixel(x, y, color);
+                }
             }
         }
     }
@@ -69,5 +87,15 @@ public class Rectangle extends DrawingTool {
                 drawRectangle(x1, y1, x, y, super.getMainBitmap(), RenderingType.SOLID);
                 break;
         }
+    }
+
+    @Override
+    public int getColor() {
+        return painter.getColor();
+    }
+
+    @Override
+    public void setColor(int color) {
+        painter.setColor(color);
     }
 }

@@ -1,5 +1,6 @@
 package cg.computergraphics;
 
+import android.content.pm.ActivityInfo;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +12,6 @@ import android.widget.CompoundButton;
 
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.MiniDrawer;
 import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
@@ -36,9 +36,12 @@ public class MainActivity extends AppCompatActivity {
         //app settings
         appSettings = new AppSettings();
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
         myview = (MyView) findViewById(R.id.myview);
-        myview.setDrawingTool(1);
+        myview.setBitmapScale(appSettings.getBitmapScale());
+        myview.setDrawingTool(appSettings.getDefaultTool());
+
 
         //alert dialogs manager
         dialogWindowManager = new DialogWindowManager(MainActivity.this);
@@ -57,7 +60,13 @@ public class MainActivity extends AppCompatActivity {
                 .addDrawerItems(
                         new SectionDrawerItem().withDivider(false).withName("Tools"),
                         new PrimaryDrawerItem().withIdentifier(1).withName("Brush").withIcon(R.drawable.ic_gesture),
-                        new PrimaryDrawerItem().withIdentifier(2).withName("Line").withIcon(R.drawable.ic_vector_line),
+                        new SwitchDrawerItem().withIdentifier(2).withName("Line").withIcon(R.drawable.ic_vector_line)
+                                .withOnCheckedChangeListener(new OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
+                                        appSettings.setLineColorApprox(isChecked);
+                                    }
+                                }),
                         new PrimaryDrawerItem().withIdentifier(3).withName("Bezier curve").withIcon(R.drawable.ic_vector_curve),
                         new PrimaryDrawerItem().withSelectable(false).withName("Mosaic").withIcon(R.drawable.ic_grid)
                                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -72,14 +81,19 @@ public class MainActivity extends AppCompatActivity {
                         new SectionDrawerItem().withDivider(true).withName("Figures"),
                         new PrimaryDrawerItem().withIdentifier(5).withName("Circle").withIcon(R.drawable.ic_vector_circle2),
                         new PrimaryDrawerItem().withIdentifier(6).withName("Rectangle").withIcon(R.drawable.ic_rectangle),
-                        new PrimaryDrawerItem().withIdentifier(7).withName("Polygon").withIcon(R.drawable.ic_polygon),
+                        new SwitchDrawerItem().withIdentifier(7).withName("Polygon").withIcon(R.drawable.ic_polygon)
+                                .withOnCheckedChangeListener(new OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
+                                        appSettings.setPolygonColorApprox(isChecked);
+                                    }
+                                }),
                         new PrimaryDrawerItem().withIdentifier(8).withName("KR Figure").withIcon(R.drawable.ic_figure),
-                        new SwitchDrawerItem().withSelectable(false).withName("With filling").withIcon(R.drawable.ic_fill)
+                        new SwitchDrawerItem().withSelectable(false).withName("With filling")
                                 .withOnCheckedChangeListener(new OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
                                         appSettings.setFill(isChecked);
-                                        sideBar.closeDrawer();
                                     }
                                 }),
                         new DividerDrawerItem(),
@@ -88,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
                                         appSettings.setScroll(isChecked);
-                                        sideBar.closeDrawer();
                                     }
                                 })
                 )
@@ -98,12 +111,14 @@ public class MainActivity extends AppCompatActivity {
                         if (drawerItem.isSelected()) {
                             myview.getDrawingTool().transferToMainBitmap();
                             myview.setDrawingTool((int) drawerItem.getIdentifier());
-                        }
-                        return false;
+                            return false;
+                        } else return true;
                     }
                 })
                 //.withDrawerWidthPx(170)
                 .build();
+
+        sideBar.setSelection(appSettings.getDefaultTool());
 
         //color picker button
         FloatingActionButton colorPickerButton = (FloatingActionButton) findViewById(R.id.color_picker_button);

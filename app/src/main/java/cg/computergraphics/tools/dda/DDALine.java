@@ -1,8 +1,12 @@
-package cg.computergraphics.tools;
+package cg.computergraphics.tools.dda;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.MotionEvent;
+
+import cg.computergraphics.MainActivity;
+import cg.computergraphics.tools.DrawingTool;
+import cg.computergraphics.tools.RenderingType;
 
 /**
  * Created by MAX on 13.03.2017.
@@ -73,11 +77,18 @@ public class DDALine extends DrawingTool {
                 drawDDALine(startX, startY, endX, endY, super.getFakeBitmap(), RenderingType.ERASE);
                 endX = x;
                 endY = y;
-                drawDDALine(startX, startY, x, y, super.getFakeBitmap(), RenderingType.GRADIENT);
+                if (MainActivity.appSettings.isLineColorApprox())
+                    drawDDALine(startX, startY, x, y, super.getFakeBitmap(), RenderingType.GRADIENT);
+                else
+                    drawDDALine(startX, startY, x, y, super.getFakeBitmap(), RenderingType.SOLID);
+
                 break;
             case MotionEvent.ACTION_UP:
                 drawDDALine(startX, startY, x, y, super.getFakeBitmap(), RenderingType.ERASE);
-                drawDDALine(startX, startY, x, y, super.getMainBitmap(), RenderingType.GRADIENT);
+                if (MainActivity.appSettings.isLineColorApprox())
+                    drawDDALine(startX, startY, x, y, super.getMainBitmap(), RenderingType.GRADIENT);
+                else
+                    drawDDALine(startX, startY, x, y, super.getMainBitmap(), RenderingType.SOLID);
                 break;
         }
     }
