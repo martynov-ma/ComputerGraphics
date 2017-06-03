@@ -1,4 +1,4 @@
-package cg.computergraphics.tools;
+package cg.computergraphics.tools.curve;
 
 import android.graphics.Bitmap;
 import android.view.MotionEvent;
@@ -6,6 +6,8 @@ import android.view.MotionEvent;
 import java.util.ArrayList;
 
 import cg.computergraphics.Vertex;
+import cg.computergraphics.tools.DrawingTool;
+import cg.computergraphics.tools.RenderingType;
 import cg.computergraphics.tools.brz.BrzLine;
 
 /**

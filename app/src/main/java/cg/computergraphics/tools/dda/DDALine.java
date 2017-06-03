@@ -3,6 +3,7 @@ package cg.computergraphics.tools.dda;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.MotionEvent;
+import android.widget.Button;
 
 import cg.computergraphics.MainActivity;
 import cg.computergraphics.tools.DrawingTool;
@@ -60,6 +61,70 @@ public class DDALine extends DrawingTool {
         }
     }
 
+    public void drawDDALineWithAA(int startX, int startY, int endX, int endY, Bitmap bitmap, RenderingType renderingType) {
+        if (renderingType == RenderingType.ERASE) {
+            bitmap.eraseColor(0);
+            return;
+        }
+
+        int dx = Math.abs(endX - startX);
+        int dy = Math.abs(endY - startY);
+        //Горизонтальные и вертикальные линии не нуждаются в сглаживании
+        if (dx == 0 || dy == 0) {
+            drawDDALine(startX, startY, endX, endY, bitmap, renderingType);
+            return;
+        }
+        float gradient;
+        if (dx > dy) {
+            if (endX < startX) {
+                startX += endX;
+                endX = startX - endX;
+                startX -= endX;
+                startY += endY;
+                endY = startY - endY;
+                startY -= endY;
+            }
+
+            gradient = (float) dy / dx;
+            if(endY < startY) gradient =- gradient;
+
+            float interY = startY + gradient;
+            bitmap.setPixel(startX, startY, super.getColor());
+            for (int x = startX; x < endX; ++x) {
+                bitmap.setPixel(x, (int) interY, Color.argb((int) (255 - fractionalPart(interY) * 255), Color.red(super.getColor()), Color.green(super.getColor()), Color.blue(super.getColor())));
+                bitmap.setPixel(x, (int) interY + 1, Color.argb((int) (fractionalPart(interY) * 255), Color.red(super.getColor()), Color.green(super.getColor()), Color.blue(super.getColor())));
+                interY += gradient;
+            }
+            bitmap.setPixel(endX, endY, super.getColor());
+        } else {
+            if (endY < startY) {
+                startX += endX;
+                endX = startX - endX;
+                startX -= endX;
+                startY += endY;
+                endY = startY - endY;
+                startY -= endY;
+            }
+
+            gradient = (float) dx / dy;
+            if(endX < startX) gradient =- gradient;
+
+            float interX = startX + gradient;
+            bitmap.setPixel(startX, startY, super.getColor());
+            for (int y = startY; y < endY; ++y) {
+                bitmap.setPixel((int)interX, y, Color.argb((int) (255 - fractionalPart(interX) * 255), Color.red(super.getColor()), Color.green(super.getColor()), Color.blue(super.getColor())));
+                bitmap.setPixel((int)interX + 1, y, Color.argb((int) (fractionalPart(interX) * 255), Color.red(super.getColor()), Color.green(super.getColor()), Color.blue(super.getColor())));
+                interX += gradient;
+            }
+            bitmap.setPixel(endX, endY, super.getColor());
+        }
+    }
+
+    private float fractionalPart(float number) {
+        int tmp = (int) number;
+        return number - tmp; //вернёт дробную часть числа
+    }
+
     @Override
     public void onTouch(MotionEvent motionEvent){
 
@@ -74,21 +139,16 @@ public class DDALine extends DrawingTool {
                 endY = y;
                 break;
             case MotionEvent.ACTION_MOVE:
-                drawDDALine(startX, startY, endX, endY, super.getFakeBitmap(), RenderingType.ERASE);
+                drawDDALineWithAA(startX, startY, endX, endY, super.getFakeBitmap(), RenderingType.ERASE);
                 endX = x;
                 endY = y;
-                if (MainActivity.appSettings.isLineColorApprox())
-                    drawDDALine(startX, startY, x, y, super.getFakeBitmap(), RenderingType.GRADIENT);
-                else
-                    drawDDALine(startX, startY, x, y, super.getFakeBitmap(), RenderingType.SOLID);
-
+                drawDDALineWithAA(startX, startY, x, y, super.getFakeBitmap(),
+                        MainActivity.appSettings.isLineColorApprox() ? RenderingType.GRADIENT : RenderingType.SOLID);
                 break;
             case MotionEvent.ACTION_UP:
-                drawDDALine(startX, startY, x, y, super.getFakeBitmap(), RenderingType.ERASE);
-                if (MainActivity.appSettings.isLineColorApprox())
-                    drawDDALine(startX, startY, x, y, super.getMainBitmap(), RenderingType.GRADIENT);
-                else
-                    drawDDALine(startX, startY, x, y, super.getMainBitmap(), RenderingType.SOLID);
+                drawDDALineWithAA(startX, startY, x, y, super.getFakeBitmap(), RenderingType.ERASE);
+                drawDDALineWithAA(startX, startY, x, y, super.getMainBitmap(),
+                        MainActivity.appSettings.isLineColorApprox() ? RenderingType.GRADIENT : RenderingType.SOLID);
                 break;
         }
     }

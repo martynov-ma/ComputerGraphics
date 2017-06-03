@@ -10,11 +10,13 @@
     <item
         android:id="@+id/menuitem_writefile"
         android:orderInCategory="1"
-        android:title="Write .bmp file..." />
+        android:title="Write bmp file..." />
     <item
         android:id="@+id/menuitem_scale"
+        android:icon="@drawable/ic_scale"
         android:orderInCategory="2"
-        android:title="Set scale" />
+        android:title="Scale"
+        app:showAsAction="always" />
     <item
         android:id="@+id/menuitem_settings"
         android:orderInCategory="3"

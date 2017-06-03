@@ -16,6 +16,7 @@ public class AppSettings {
     private int lineDrawingAlgorithm;
     private int circleDrawingAlgorithm;
 
+    //private boolean isObj
     private boolean isObjFilling;
     private boolean isObjRandomColor;
 
@@ -28,6 +29,8 @@ public class AppSettings {
 
     private boolean isLineColorApprox;
     private boolean isPolygonColorApprox;
+
+    private int splinesRank;
 
     AppSettings() {
         bitmapWidth = 2000;
@@ -51,6 +54,8 @@ public class AppSettings {
 
         isLineColorApprox = false;
         isPolygonColorApprox = false;
+
+        splinesRank = 3;
     }
 
     int getBitmapWidth() {
@@ -166,5 +171,14 @@ public class AppSettings {
 
     public void setPolygonColorApprox(boolean isEnabled) {
         isPolygonColorApprox = isEnabled;
+    }
+
+
+    public int getSplinesRank() {
+        return splinesRank;
+    }
+
+    public void setSplinesRank(int splinesRank) {
+        this.splinesRank = splinesRank;
     }
 }

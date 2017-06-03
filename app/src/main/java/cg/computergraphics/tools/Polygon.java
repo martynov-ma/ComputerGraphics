@@ -21,7 +21,7 @@ public class Polygon extends DrawingTool {
     private BrzLine painter;
     private int fillColor;
 
-    private boolean editingExistingVertex = false;
+    private boolean isEditingVertex = false;
     private Point editVertex;
 
     public Polygon(Bitmap mainBitmap, Bitmap fakeBitmap) {
@@ -227,19 +227,24 @@ public class Polygon extends DrawingTool {
 
         switch (motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (vertices.size() <= 2) {
+                if (vertices.size() < 2) {
                     vertices.add(new Point(x, y));
+                    if (vertices.size() == 2) {
+                        drawPolygon(vertices, super.getFakeBitmap());
+                    }
                 } else {
                     check(x, y);
-                    if (!editingExistingVertex) {
+                    if (!isEditingVertex) {
                         vertices.add(new Point(x, y));
                         drawPolygon(vertices, super.getFakeBitmap());
                     }
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (vertices.size() > 2){
-                    if (editingExistingVertex) {
+                if (vertices.size() < 2) {
+                    vertices.add(new Point(x, y));
+                } else {
+                    if (isEditingVertex) {
                         editVertex.x = x;
                         editVertex.y = y;
                         drawPolygon(vertices, super.getFakeBitmap());
@@ -250,14 +255,7 @@ public class Polygon extends DrawingTool {
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                if (vertices.size() > 2) {
-                    if (editingExistingVertex) {
-                        editingExistingVertex = false;
-                    } else {
-                        vertices.set(vertices.size() - 1, new Point(x, y));
-                        drawPolygon(vertices, super.getFakeBitmap());
-                    }
-                }
+                if (isEditingVertex) isEditingVertex = false;
                 break;
         }
     }
@@ -268,7 +266,7 @@ public class Polygon extends DrawingTool {
             if (x < vertex.x + 60 / n && x > vertex.x - 60 / n &&
                 y < vertex.y + 60 / n && y > vertex.y - 60 / n) {
                 editVertex = vertex;
-                editingExistingVertex = true;
+                isEditingVertex = true;
                 return;
             }
         }

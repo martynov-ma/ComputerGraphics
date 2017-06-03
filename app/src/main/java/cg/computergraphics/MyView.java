@@ -16,6 +16,10 @@ import java.util.Random;
 import cg.computergraphics.tools.*;
 import cg.computergraphics.tools.brz.BrzCircle;
 import cg.computergraphics.tools.brz.BrzLine;
+import cg.computergraphics.tools.curve.BSpline;
+import cg.computergraphics.tools.curve.BezierCurve;
+import cg.computergraphics.tools.curve.HermiteCurve;
+import cg.computergraphics.tools.curve.NURBSpline;
 import cg.computergraphics.tools.dda.DDACircle;
 import cg.computergraphics.tools.dda.DDALine;
 import cg.computergraphics.tools.fill.FloodFill;
@@ -105,6 +109,15 @@ public class MyView extends View {
             case 8:
                 drawingTool = new FirstFigure(mainBitmap, fakeBitmap);
                 break;
+            case 9:
+                drawingTool = new HermiteCurve(mainBitmap, fakeBitmap);
+                break;
+            case 10:
+                drawingTool = new BSpline(mainBitmap, fakeBitmap);
+                break;
+            case 11:
+                drawingTool = new NURBSpline(mainBitmap, fakeBitmap);
+                break;
         }
     }
 
@@ -128,6 +141,9 @@ public class MyView extends View {
         fakeBitmap.eraseColor(0);
         if (selectedTool == 3) ((BezierCurve) drawingTool).cleanRefPoints();
         if (selectedTool == 7) ((Polygon) drawingTool).cleanVertices();
+        if (selectedTool == 9) ((HermiteCurve) drawingTool).cleanPoints();
+        if (selectedTool == 10) ((BSpline) drawingTool).cleanPoints();
+        if (selectedTool == 11) ((NURBSpline) drawingTool).cleanPoints();
         invalidate();
     }
 

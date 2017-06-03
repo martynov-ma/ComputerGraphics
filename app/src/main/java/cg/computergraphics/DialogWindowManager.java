@@ -256,7 +256,26 @@ class DialogWindowManager {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         applyObjSettings();
                         dialog.cancel();
-                        drawObj();
+                        long startTime, timeSpent;
+                        switch (MainActivity.appSettings.getLineDrawingAlgorithm()) {
+                            case 0:
+                                startTime = System.currentTimeMillis();
+                                new Thread(new Runnable() {
+                                    public void run() {
+                                        objFileManager.drawObjDDA();
+                                    }
+                                }).start();
+                                //objFileManager.drawObjDDA();
+                                timeSpent = System.currentTimeMillis() - startTime;
+                                Toast.makeText(mainActivity, "DDA\ntime: " + (double) timeSpent / 1000 + " sec.", Toast.LENGTH_LONG).show();
+                                break;
+                            case 1:
+                                startTime = System.currentTimeMillis();
+                                objFileManager.drawObjBrz();
+                                timeSpent = System.currentTimeMillis() - startTime;
+                                Toast.makeText(mainActivity, "BRZ\ntime: " + (double) timeSpent / 1000 + " sec.", Toast.LENGTH_LONG).show();
+                                break;
+                        }
                     }
                 })
                 .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -317,6 +336,24 @@ class DialogWindowManager {
         mosaicSize.setText(String.valueOf(MainActivity.appSettings.getMosaicSize()));
     }
 
+    private void initSetFileNameDialog(AlertDialog dialog) {
+        Date dateNow = new Date();
+        SimpleDateFormat formatForDateNow = new SimpleDateFormat("HH:mm:ss");
+        String dateNowStr = formatForDateNow.format(dateNow) + ".bmp";
+
+        fileNameTextView = (TextView) dialog.findViewById(R.id.fileNameEdit);
+        fileNameTextView.setText(dateNowStr);
+    }
+
+    private void initObjSettingsDialog(AlertDialog dialog) {
+        objIsFilling = (CheckBox) dialog.findViewById(R.id.objIsFilling);
+        objIsFilling.setChecked(MainActivity.appSettings.isObjFilling());
+
+        objIsRandomColor = (CheckBox) dialog.findViewById(R.id.objIsRandomFilling);
+        objIsRandomColor.setChecked(MainActivity.appSettings.isObjRandomColor());
+    }
+
+
     private void applySettings() {
         AppSettings appSettings = MainActivity.appSettings;
         int newBitmapWidth = Integer.parseInt(bitmapWidthEdit.getText().toString());
@@ -335,49 +372,8 @@ class DialogWindowManager {
         appSettings.setMosaicSize(Integer.parseInt(mosaicSize.getText().toString()));
     }
 
-
-    private void initObjSettingsDialog(AlertDialog dialog) {
-        objIsFilling = (CheckBox) dialog.findViewById(R.id.objIsFilling);
-        objIsFilling.setChecked(MainActivity.appSettings.isObjFilling());
-
-        objIsRandomColor = (CheckBox) dialog.findViewById(R.id.objIsRandomFilling);
-        objIsRandomColor.setChecked(MainActivity.appSettings.isObjRandomColor());
-    }
-
     private void applyObjSettings() {
         MainActivity.appSettings.setObjFilling(objIsFilling.isChecked());
         MainActivity.appSettings.setObjRandomColor(objIsRandomColor.isChecked());
-    }
-
-    private void drawObj() {
-        long startTime, timeSpent;
-        switch (MainActivity.appSettings.getLineDrawingAlgorithm()) {
-            case 0:
-                startTime = System.currentTimeMillis();
-                new Thread(new Runnable() {
-                    public void run() {
-                        objFileManager.drawObjDDA();
-                    }
-                }).start();
-                //objFileManager.drawObjDDA();
-                timeSpent = System.currentTimeMillis() - startTime;
-                Toast.makeText(mainActivity, "DDA\ntime: " + (double) timeSpent / 1000 + " sec.", Toast.LENGTH_LONG).show();
-                break;
-            case 1:
-                startTime = System.currentTimeMillis();
-                objFileManager.drawObjBrz();
-                timeSpent = System.currentTimeMillis() - startTime;
-                Toast.makeText(mainActivity, "BRZ\ntime: " + (double) timeSpent / 1000 + " sec.", Toast.LENGTH_LONG).show();
-                break;
-        }
-    }
-
-    private void initSetFileNameDialog(AlertDialog dialog) {
-        Date dateNow = new Date();
-        SimpleDateFormat formatForDateNow = new SimpleDateFormat("HH:mm:ss");
-        String dateNowStr = formatForDateNow.format(dateNow) + ".bmp";
-
-        fileNameTextView = (TextView) dialog.findViewById(R.id.fileNameEdit);
-        fileNameTextView.setText(dateNowStr);
     }
 }

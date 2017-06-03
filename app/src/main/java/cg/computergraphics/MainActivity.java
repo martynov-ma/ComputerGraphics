@@ -15,6 +15,7 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
@@ -67,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
                                         appSettings.setLineColorApprox(isChecked);
                                     }
                                 }),
-                        new PrimaryDrawerItem().withIdentifier(3).withName("Bezier curve").withIcon(R.drawable.ic_vector_curve),
-                        new PrimaryDrawerItem().withSelectable(false).withName("Mosaic").withIcon(R.drawable.ic_grid)
+                        new PrimaryDrawerItem().withIdentifier(3).withName("Bezier curve").withIcon(R.drawable.ic_curve),
+                        new PrimaryDrawerItem().withSelectable(false).withName("Mosaic").withIcon(R.drawable.ic_mosaic)
                                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                                     @Override
                                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -77,9 +78,15 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 }),
                         new PrimaryDrawerItem().withIdentifier(4).withName("Fill").withIcon(R.drawable.ic_fill),
-
+                        new DividerDrawerItem(),
+                        new PrimaryDrawerItem().withSelectable(false).withName("Splines").withIcon(R.drawable.ic_vector_curve)
+                                .withSubItems(
+                                        new SecondaryDrawerItem().withIdentifier(9).withName("Hermite curve").withIcon(R.drawable.ic_spline_elem),
+                                        new SecondaryDrawerItem().withIdentifier(10).withName("B-Spline").withIcon(R.drawable.ic_spline_elem),
+                                        new SecondaryDrawerItem().withIdentifier(11).withName("NURBSpline").withIcon(R.drawable.ic_spline_elem)
+                                ),
                         new SectionDrawerItem().withDivider(true).withName("Figures"),
-                        new PrimaryDrawerItem().withIdentifier(5).withName("Circle").withIcon(R.drawable.ic_vector_circle2),
+                        new PrimaryDrawerItem().withIdentifier(5).withName("Circle").withIcon(R.drawable.ic_vector_circle),
                         new PrimaryDrawerItem().withIdentifier(6).withName("Rectangle").withIcon(R.drawable.ic_rectangle),
                         new SwitchDrawerItem().withIdentifier(7).withName("Polygon").withIcon(R.drawable.ic_polygon)
                                 .withOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -94,14 +101,6 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
                                         appSettings.setFill(isChecked);
-                                    }
-                                }),
-                        new DividerDrawerItem(),
-                        new SwitchDrawerItem().withSelectable(false).withName("Scroll").withIcon(R.drawable.ic_meteor)
-                                .withOnCheckedChangeListener(new OnCheckedChangeListener() {
-                                    @Override
-                                    public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
-                                        appSettings.setScroll(isChecked);
                                     }
                                 })
                 )
@@ -119,6 +118,15 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         sideBar.setSelection(appSettings.getDefaultTool());
+        sideBar.addStickyFooterItem(
+                new SwitchDrawerItem().withSelectable(false).withName("Scroll").withIcon(R.drawable.ic_scroll)
+                        .withOnCheckedChangeListener(new OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
+                                appSettings.setScroll(isChecked);
+                            }
+                        })
+        );
 
         //color picker button
         FloatingActionButton colorPickerButton = (FloatingActionButton) findViewById(R.id.color_picker_button);
