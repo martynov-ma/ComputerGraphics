@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.MotionEvent;
 import android.widget.Button;
 
+import cg.computergraphics.AppSettings;
 import cg.computergraphics.MainActivity;
 import cg.computergraphics.tools.DrawingTool;
 import cg.computergraphics.tools.RenderingType;
@@ -143,12 +144,12 @@ public class DDALine extends DrawingTool {
                 endX = x;
                 endY = y;
                 drawDDALineWithAA(startX, startY, x, y, super.getFakeBitmap(),
-                        MainActivity.appSettings.isLineColorApprox() ? RenderingType.GRADIENT : RenderingType.SOLID);
+                        AppSettings.getInstance().isLineColorApprox() ? RenderingType.GRADIENT : RenderingType.SOLID);
                 break;
             case MotionEvent.ACTION_UP:
                 drawDDALineWithAA(startX, startY, x, y, super.getFakeBitmap(), RenderingType.ERASE);
                 drawDDALineWithAA(startX, startY, x, y, super.getMainBitmap(),
-                        MainActivity.appSettings.isLineColorApprox() ? RenderingType.GRADIENT : RenderingType.SOLID);
+                        AppSettings.getInstance().isLineColorApprox() ? RenderingType.GRADIENT : RenderingType.SOLID);
                 break;
         }
     }

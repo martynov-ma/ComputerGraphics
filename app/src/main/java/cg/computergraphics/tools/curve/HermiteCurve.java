@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
+import cg.computergraphics.AppSettings;
 import cg.computergraphics.MainActivity;
 import cg.computergraphics.tools.DrawingTool;
 import cg.computergraphics.tools.RenderingType;
@@ -121,7 +122,7 @@ public class HermiteCurve extends DrawingTool {
     }
 
     private void check(int x, int y) {
-        int n = MainActivity.appSettings.getBitmapScale();
+        int n = AppSettings.getInstance().getBitmapScale();
         for (int i = 0; i < points.size(); i++) {
             if (x < points.get(i).x + 60 / n && x > points.get(i).x - 60 / n &&
                     y < points.get(i).y + 60 / n && y > points.get(i).y - 60 / n) {

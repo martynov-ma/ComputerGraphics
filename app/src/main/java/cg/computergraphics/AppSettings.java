@@ -7,32 +7,27 @@ import android.graphics.Color;
  */
 
 public class AppSettings {
-    private int bitmapWidth;
-    private int bitmapHeight;
-    private int bitmapScale;
 
-    private int defaultTool;
+    private static AppSettings appSettings = null;
 
-    private int lineDrawingAlgorithm;
-    private int circleDrawingAlgorithm;
+    public static AppSettings getInstance() {
+        if (appSettings == null) {
+            appSettings = new AppSettings();
+        }
+        return appSettings;
+    }
+
+    private int bitmapWidth, bitmapHeight, bitmapScale;
+    private int lineDrawingAlgorithm, circleDrawingAlgorithm;
 
     //private boolean isObj
-    private boolean isObjFilling;
-    private boolean isObjRandomColor;
+    private boolean isObjFilling, isObjRandomColor;
+    private boolean isScrollEnabled, isFillEnabled;
+    private boolean isLineColorApprox, isPolygonColorApprox;
 
-    private int mosaicSize;
+    private int defaultTool, mosaicSize, drawingColor, splinesRank;
 
-    private int drawingColor;
-
-    private boolean isScrollEnabled;
-    private boolean isFillEnabled;
-
-    private boolean isLineColorApprox;
-    private boolean isPolygonColorApprox;
-
-    private int splinesRank;
-
-    AppSettings() {
+    private AppSettings() {
         bitmapWidth = 2000;
         bitmapHeight = 2000;
         bitmapScale = 1;

@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
+import cg.computergraphics.AppSettings;
 import cg.computergraphics.MainActivity;
 import cg.computergraphics.tools.DrawingTool;
 import cg.computergraphics.tools.RenderingType;
@@ -34,7 +35,7 @@ public class BSpline extends DrawingTool {
     public BSpline(Bitmap mainBitmap, Bitmap fakeBitmap) {
         super(mainBitmap, fakeBitmap);
         n = 0;
-        rank = MainActivity.appSettings.getSplinesRank();
+        rank = AppSettings.getInstance().getSplinesRank();
         points = new ArrayList<>();
         step = 0.002F;
         size = 0;
@@ -174,7 +175,7 @@ public class BSpline extends DrawingTool {
     }
 
     private void check(int x, int y) {
-        int n = MainActivity.appSettings.getBitmapScale();
+        int n = AppSettings.getInstance().getBitmapScale();
         for (Point point: points) {
             if (x < point.x + 60 / n && x > point.x - 60 / n &&
                     y < point.y + 60 / n && y > point.y - 60 / n) {

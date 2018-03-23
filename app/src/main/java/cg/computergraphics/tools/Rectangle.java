@@ -3,6 +3,7 @@ package cg.computergraphics.tools;
 import android.graphics.Bitmap;
 import android.view.MotionEvent;
 
+import cg.computergraphics.AppSettings;
 import cg.computergraphics.MainActivity;
 import cg.computergraphics.tools.brz.BrzLine;
 
@@ -56,7 +57,7 @@ public class Rectangle extends DrawingTool {
             bitmap.setPixel(x2, y, color);
         }
 
-        if (MainActivity.appSettings.isFillEnabled()) {
+        if (AppSettings.getInstance().isFillEnabled()) {
             for (int y = y1; y < y2; y++) {
                 for (int x = x1; x < x2; x++) {
                     bitmap.setPixel(x, y, color);

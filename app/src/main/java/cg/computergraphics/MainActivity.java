@@ -26,22 +26,17 @@ public class MainActivity extends AppCompatActivity {
     private MyView myview;
     private Drawer sideBar;
 
-    public static AppSettings appSettings;
-
     private DialogWindowManager dialogWindowManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //app settings
-        appSettings = new AppSettings();
-
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
         myview = (MyView) findViewById(R.id.myview);
-        myview.setBitmapScale(appSettings.getBitmapScale());
-        myview.setDrawingTool(appSettings.getDefaultTool());
+        myview.setBitmapScale(AppSettings.getInstance().getBitmapScale());
+        myview.setDrawingTool(AppSettings.getInstance().getDefaultTool());
 
 
         //alert dialogs manager
@@ -65,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                                 .withOnCheckedChangeListener(new OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
-                                        appSettings.setLineColorApprox(isChecked);
+                                        AppSettings.getInstance().setLineColorApprox(isChecked);
                                     }
                                 }),
                         new PrimaryDrawerItem().withIdentifier(3).withName("Bezier curve").withIcon(R.drawable.ic_curve),
@@ -92,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                                 .withOnCheckedChangeListener(new OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
-                                        appSettings.setPolygonColorApprox(isChecked);
+                                        AppSettings.getInstance().setPolygonColorApprox(isChecked);
                                     }
                                 }),
                         new PrimaryDrawerItem().withIdentifier(8).withName("KR Figure").withIcon(R.drawable.ic_figure),
@@ -100,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                                 .withOnCheckedChangeListener(new OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
-                                        appSettings.setFill(isChecked);
+                                        AppSettings.getInstance().setFill(isChecked);
                                     }
                                 })
                 )
@@ -117,13 +112,13 @@ public class MainActivity extends AppCompatActivity {
                 //.withDrawerWidthPx(170)
                 .build();
 
-        sideBar.setSelection(appSettings.getDefaultTool());
+        sideBar.setSelection(AppSettings.getInstance().getDefaultTool());
         sideBar.addStickyFooterItem(
                 new SwitchDrawerItem().withSelectable(false).withName("Scroll").withIcon(R.drawable.ic_scroll)
                         .withOnCheckedChangeListener(new OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
-                                appSettings.setScroll(isChecked);
+                                AppSettings.getInstance().setScroll(isChecked);
                             }
                         })
         );

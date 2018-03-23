@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.MotionEvent;
 
+import cg.computergraphics.AppSettings;
 import cg.computergraphics.MainActivity;
 import cg.computergraphics.tools.brz.BrzCircle;
 import cg.computergraphics.tools.brz.BrzLine;
@@ -97,7 +98,7 @@ public class SecondFigure extends DrawingTool {
                 drawLines(x1, y1, x2, y2, super.getFakeBitmap(), RenderingType.ERASE);
                 brz.drawCircleBrz(x1, y1, x, y, super.getMainBitmap(), RenderingType.SOLID);
                 drawLines(x1, y1, x2, y2, super.getMainBitmap(), RenderingType.SOLID);
-                if (MainActivity.appSettings.isFillEnabled()) {
+                if (AppSettings.getInstance().isFillEnabled()) {
                     if (R > 1) {
                         ff.fillBackground(centerX + 1, centerY);
                         ff.fillBackground(centerX, centerY + 1);

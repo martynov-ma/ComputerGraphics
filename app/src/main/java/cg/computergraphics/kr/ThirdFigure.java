@@ -3,6 +3,7 @@ package cg.computergraphics.kr;
 import android.graphics.Bitmap;
 import android.view.MotionEvent;
 
+import cg.computergraphics.AppSettings;
 import cg.computergraphics.MainActivity;
 import cg.computergraphics.Vertex;
 import cg.computergraphics.tools.dda.DDALine;
@@ -89,7 +90,7 @@ public class ThirdFigure extends DrawingTool {
             case MotionEvent.ACTION_UP:
                 drawFigure(x1, y1, x, y, super.getFakeBitmap(), RenderingType.ERASE);
                 drawFigure(x1, y1, x, y, super.getMainBitmap(), RenderingType.SOLID);
-                if (MainActivity.appSettings.isFillEnabled()) {
+                if (AppSettings.getInstance().isFillEnabled()) {
                     fillFigure(x1, y1, x, y);
                 }
                 break;

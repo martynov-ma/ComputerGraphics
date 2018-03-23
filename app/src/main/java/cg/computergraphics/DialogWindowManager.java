@@ -237,7 +237,7 @@ class DialogWindowManager {
                     @Override
                     public void onColorSelected(@ColorInt int color) {
                         mainActivity.getMyView().getDrawingTool().setColor(color);
-                        MainActivity.appSettings.setDrawingColor(color);
+                        AppSettings.getInstance().setDrawingColor(color);
                     }
                 })
                 .create()
@@ -257,7 +257,7 @@ class DialogWindowManager {
                         applyObjSettings();
                         dialog.cancel();
                         long startTime, timeSpent;
-                        switch (MainActivity.appSettings.getLineDrawingAlgorithm()) {
+                        switch (AppSettings.getInstance().getLineDrawingAlgorithm()) {
                             case 0:
                                 startTime = System.currentTimeMillis();
                                 new Thread(new Runnable() {
@@ -298,10 +298,10 @@ class DialogWindowManager {
 
     private void initSetScaleDialog(AlertDialog dialog) {
         scaleTextView = (TextView) dialog.findViewById(R.id.textScale);
-        scaleTextView.setText(String.valueOf(MainActivity.appSettings.getBitmapScale()));
+        scaleTextView.setText(String.valueOf(AppSettings.getInstance().getBitmapScale()));
 
         scaleSeekBar = (SeekBar) dialog.findViewById(R.id.seekBar);
-        scaleSeekBar.setProgress(MainActivity.appSettings.getBitmapScale() - 1);
+        scaleSeekBar.setProgress(AppSettings.getInstance().getBitmapScale() - 1);
         scaleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -322,18 +322,18 @@ class DialogWindowManager {
 
     private void initSettingsDialog(AlertDialog dialog) {
         bitmapWidthEdit = (TextView) dialog.findViewById(R.id.bitmapWidthEdit);
-        bitmapWidthEdit.setText(String.valueOf(MainActivity.appSettings.getBitmapWidth()));
+        bitmapWidthEdit.setText(String.valueOf(AppSettings.getInstance().getBitmapWidth()));
 
         bitmapHeightEdit = (TextView) dialog.findViewById(R.id.bitmapHeightEdit);
-        bitmapHeightEdit.setText(String.valueOf(MainActivity.appSettings.getBitmapHeight()));
+        bitmapHeightEdit.setText(String.valueOf(AppSettings.getInstance().getBitmapHeight()));
 
         lineSpinner = (Spinner) dialog.findViewById(R.id.lineSpinner);
-        lineSpinner.setSelection(MainActivity.appSettings.getLineDrawingAlgorithm());
+        lineSpinner.setSelection(AppSettings.getInstance().getLineDrawingAlgorithm());
         circleSpinner = (Spinner) dialog.findViewById(R.id.circleSpinner);
-        circleSpinner.setSelection(MainActivity.appSettings.getCircleDrawingAlgorithm());
+        circleSpinner.setSelection(AppSettings.getInstance().getCircleDrawingAlgorithm());
 
         mosaicSize = (TextView) dialog.findViewById(R.id.mosaicSizeEdit);
-        mosaicSize.setText(String.valueOf(MainActivity.appSettings.getMosaicSize()));
+        mosaicSize.setText(String.valueOf(AppSettings.getInstance().getMosaicSize()));
     }
 
     private void initSetFileNameDialog(AlertDialog dialog) {
@@ -347,19 +347,19 @@ class DialogWindowManager {
 
     private void initObjSettingsDialog(AlertDialog dialog) {
         objIsFilling = (CheckBox) dialog.findViewById(R.id.objIsFilling);
-        objIsFilling.setChecked(MainActivity.appSettings.isObjFilling());
+        objIsFilling.setChecked(AppSettings.getInstance().isObjFilling());
 
         objIsRandomColor = (CheckBox) dialog.findViewById(R.id.objIsRandomFilling);
-        objIsRandomColor.setChecked(MainActivity.appSettings.isObjRandomColor());
+        objIsRandomColor.setChecked(AppSettings.getInstance().isObjRandomColor());
     }
 
 
     private void applySettings() {
-        AppSettings appSettings = MainActivity.appSettings;
+        AppSettings appSettings = AppSettings.getInstance();
         int newBitmapWidth = Integer.parseInt(bitmapWidthEdit.getText().toString());
         int newBitmapHeight = Integer.parseInt(bitmapHeightEdit.getText().toString());
 
-        if (appSettings.getBitmapWidth() != newBitmapWidth || MainActivity.appSettings.getBitmapHeight() != newBitmapHeight) {
+        if (appSettings.getBitmapWidth() != newBitmapWidth || AppSettings.getInstance().getBitmapHeight() != newBitmapHeight) {
             appSettings.setBitmapWidth(newBitmapWidth);
             appSettings.setBitmapHeight(newBitmapHeight);
             mainActivity.getMyView().updateBitmap();
@@ -373,7 +373,7 @@ class DialogWindowManager {
     }
 
     private void applyObjSettings() {
-        MainActivity.appSettings.setObjFilling(objIsFilling.isChecked());
-        MainActivity.appSettings.setObjRandomColor(objIsRandomColor.isChecked());
+        AppSettings.getInstance().setObjFilling(objIsFilling.isChecked());
+        AppSettings.getInstance().setObjRandomColor(objIsRandomColor.isChecked());
     }
 }

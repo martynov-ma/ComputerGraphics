@@ -86,15 +86,15 @@ public class ObjFileManager {
     }
 
     public void drawObjDDA() {
-        if (MainActivity.appSettings.isObjFilling()) {
+        if (AppSettings.getInstance().isObjFilling()) {
             Polygon polygon = new Polygon(mainBitmap, fakeBitmap);
-            polygon.setColor(MainActivity.appSettings.getDrawingColor());
+            polygon.setColor(AppSettings.getInstance().getDrawingColor());
             for (int i = 0; i < faces.size() - 1; i++) {
                 for (int j = 0; j < 3; j++) {
                     triangleVertices.add(new Point((int) vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getX(),
                                                    (int) vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getY()));
                 }
-                if (MainActivity.appSettings.isObjRandomColor()) {
+                if (AppSettings.getInstance().isObjRandomColor()) {
                     polygon.setColor(Color.rgb((int) (Math.random() * 1000) % 255, (int) (Math.random() * 1000) % 255, (int) (Math.random() * 1000) % 255));
                 }
                 polygon.fillPolygon(triangleVertices, mainBitmap);
@@ -115,15 +115,15 @@ public class ObjFileManager {
     }
 
     public void drawObjBrz() {
-        if (MainActivity.appSettings.isObjFilling()) {
+        if (AppSettings.getInstance().isObjFilling()) {
             Polygon polygon = new Polygon(mainBitmap, fakeBitmap);
-            polygon.setColor(MainActivity.appSettings.getDrawingColor());
+            polygon.setColor(AppSettings.getInstance().getDrawingColor());
             for (int i = 0; i < faces.size() - 1; i++) {
                 for (int j = 0; j < 3; j++) {
                     triangleVertices.add(new Point((int) vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getX(),
                             (int) vertices.get(Integer.parseInt(faces.get(i)[j]) - 1).getY()));
                 }
-                if (MainActivity.appSettings.isObjRandomColor()) {
+                if (AppSettings.getInstance().isObjRandomColor()) {
                     polygon.setColor(Color.rgb((int) (Math.random() * 1000) % 255, (int) (Math.random() * 1000) % 255, (int) (Math.random() * 1000) % 255));
                 }
                 polygon.fillPolygon(triangleVertices, mainBitmap);

@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import cg.computergraphics.AppSettings;
 import cg.computergraphics.MainActivity;
 import cg.computergraphics.tools.brz.BrzLine;
 
@@ -27,7 +28,7 @@ public class Polygon extends DrawingTool {
     public Polygon(Bitmap mainBitmap, Bitmap fakeBitmap) {
         super(mainBitmap, fakeBitmap);
         vertices = new ArrayList<>();
-        fillColor = MainActivity.appSettings.getDrawingColor();
+        fillColor = AppSettings.getInstance().getDrawingColor();
         painter = new BrzLine(mainBitmap, fakeBitmap);
         painter.setColor(Color.BLACK);
     }
@@ -48,7 +49,7 @@ public class Polygon extends DrawingTool {
 
     private void drawPolygon(ArrayList<Point> vertices, Bitmap bitmap) {
         super.getFakeBitmap().eraseColor(0);
-        if (MainActivity.appSettings.isFillEnabled()) {
+        if (AppSettings.getInstance().isFillEnabled()) {
             fillPolygon(vertices, bitmap);
         }
         for (int i = 0; i < vertices.size(); i++) {
@@ -77,7 +78,7 @@ public class Polygon extends DrawingTool {
         int fillColor;
         int delY = maxY - minY;
         float r1 = 0, g1 = 0, b1 = 0, delR = 0, delG = 0, delB = 0;
-        if (MainActivity.appSettings.isPolygonColorApprox()) {
+        if (AppSettings.getInstance().isPolygonColorApprox()) {
             int startColor = Color.rgb(255, 0, 0);
             int endColor = Color.rgb(0, 0, 255);
             r1 = Color.red(startColor);
@@ -113,7 +114,7 @@ public class Polygon extends DrawingTool {
                 }
             }
 
-            if (MainActivity.appSettings.isPolygonColorApprox()) {
+            if (AppSettings.getInstance().isPolygonColorApprox()) {
                 r1 += delR;
                 g1 += delG;
                 b1 += delB;
@@ -261,7 +262,7 @@ public class Polygon extends DrawingTool {
     }
 
     private void check(int x, int y) {
-        int n = MainActivity.appSettings.getBitmapScale();
+        int n = AppSettings.getInstance().getBitmapScale();
         for (Point vertex : vertices) {
             if (x < vertex.x + 60 / n && x > vertex.x - 60 / n &&
                 y < vertex.y + 60 / n && y > vertex.y - 60 / n) {

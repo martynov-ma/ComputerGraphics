@@ -3,6 +3,7 @@ package cg.computergraphics.tools;
 import android.graphics.Bitmap;
 import android.view.MotionEvent;
 
+import cg.computergraphics.AppSettings;
 import cg.computergraphics.MainActivity;
 
 /**
@@ -17,7 +18,7 @@ public abstract class DrawingTool {
     public DrawingTool(Bitmap mainBitmap, Bitmap fakeBitmap) {
         this.mainBitmap = mainBitmap;
         this.fakeBitmap = fakeBitmap;
-        color = MainActivity.appSettings.getDrawingColor();
+        color = AppSettings.getInstance().getDrawingColor();
     }
 
     public Bitmap getMainBitmap() {

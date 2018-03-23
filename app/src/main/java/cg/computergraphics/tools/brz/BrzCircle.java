@@ -3,6 +3,7 @@ package cg.computergraphics.tools.brz;
 import android.graphics.Bitmap;
 import android.view.MotionEvent;
 
+import cg.computergraphics.AppSettings;
 import cg.computergraphics.MainActivity;
 import cg.computergraphics.tools.DrawingTool;
 import cg.computergraphics.tools.RenderingType;
@@ -54,7 +55,7 @@ public class BrzCircle extends DrawingTool {
         bitmap.setPixel(centerX + R, centerY, color);
         bitmap.setPixel(centerX - R, centerY, color);
 
-        if (MainActivity.appSettings.isFillEnabled()) {
+        if (AppSettings.getInstance().isFillEnabled()) {
             for (int dx = centerX - R; dx < centerX + R; dx++) {
                 bitmap.setPixel(dx, centerY, color);
             }
@@ -79,7 +80,7 @@ public class BrzCircle extends DrawingTool {
             bitmap.setPixel(centerX + y, centerY - x, color);
             bitmap.setPixel(centerX - y, centerY - x, color);
 
-            if (MainActivity.appSettings.isFillEnabled()) {
+            if (AppSettings.getInstance().isFillEnabled()) {
                 for (int dx = centerX - x; dx < centerX + x; dx++) {
                     bitmap.setPixel(dx, centerY + y, color);
                     bitmap.setPixel(dx, centerY - y, color);

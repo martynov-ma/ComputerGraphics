@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 
 import java.util.Stack;
 
+import cg.computergraphics.AppSettings;
 import cg.computergraphics.MainActivity;
 import cg.computergraphics.tools.DrawingTool;
 
@@ -22,7 +23,7 @@ public class FloodFill extends DrawingTool {
     public FloodFill(Bitmap mainBitmap) {
         super(mainBitmap, null);
         stack = new Stack<>();
-        fillColor = MainActivity.appSettings.getDrawingColor();
+        fillColor = AppSettings.getInstance().getDrawingColor();
     }
 
     @Override
