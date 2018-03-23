@@ -53,19 +53,19 @@ public class AppSettings {
         splinesRank = 3;
     }
 
-    int getBitmapWidth() {
+    public int getBitmapWidth() {
         return bitmapWidth;
     }
 
-    void setBitmapWidth(int bitmapWidth) {
+    public void setBitmapWidth(int bitmapWidth) {
         this.bitmapWidth = bitmapWidth;
     }
 
-    int getBitmapHeight() {
+    public int getBitmapHeight() {
         return bitmapHeight;
     }
 
-    void setBitmapHeight(int bitmapHeight) {
+    public void setBitmapHeight(int bitmapHeight) {
         this.bitmapHeight = bitmapHeight;
     }
 
@@ -83,19 +83,19 @@ public class AppSettings {
     }
 
 
-    int getLineDrawingAlgorithm() {
+    public int getLineDrawingAlgorithm() {
         return lineDrawingAlgorithm;
     }
 
-    void setLineDrawingAlgorithm(int algorithmId) {
+    public void setLineDrawingAlgorithm(int algorithmId) {
         lineDrawingAlgorithm = algorithmId;
     }
 
-    int getCircleDrawingAlgorithm() {
+    public int getCircleDrawingAlgorithm() {
         return circleDrawingAlgorithm;
     }
 
-    void setCircleDrawingAlgorithm(int algorithmId) {
+    public void setCircleDrawingAlgorithm(int algorithmId) {
         circleDrawingAlgorithm = algorithmId;
     }
 
@@ -117,11 +117,11 @@ public class AppSettings {
     }
 
 
-    int getMosaicSize() {
+    public int getMosaicSize() {
         return mosaicSize;
     }
 
-    void setMosaicSize(int mosaicSize) {
+    public void setMosaicSize(int mosaicSize) {
         this.mosaicSize = mosaicSize;
     }
 

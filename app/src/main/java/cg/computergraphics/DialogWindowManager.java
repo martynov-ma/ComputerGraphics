@@ -29,7 +29,7 @@ import me.priyesh.chroma.ColorSelectListener;
  * Created by MAX on 19.03.2017.
  */
 
-class DialogWindowManager {
+public class DialogWindowManager {
 
     static final int IDD_SET_SCALE = 1;
     static final int IDD_MOSAIC = 2;
@@ -43,16 +43,7 @@ class DialogWindowManager {
     private AlertDialog.Builder builder;
     private AlertDialog dialog;
 
-    //set scale dialog content
-    private TextView scaleTextView;
-    private SeekBar scaleSeekBar;
 
-    //appSettings dialog content
-    private TextView bitmapWidthEdit;
-    private TextView bitmapHeightEdit;
-    private Spinner lineSpinner;
-    private Spinner circleSpinner;
-    private TextView mosaicSize;
 
     //open file dialog content
     private String[] mFileList;
@@ -97,75 +88,11 @@ class DialogWindowManager {
     }
 
 
-    private void showSetScaleDialog() {
-        View setScaleView = mainActivity.getLayoutInflater().inflate(R.layout.ad_setscale_content, null);
-        prepareView(setScaleView);
 
-        builder = new AlertDialog.Builder(mainActivity);
-        builder.setTitle("Set scale")
-                .setView(setScaleView)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        mainActivity.getMyView().setBitmapScale(scaleSeekBar.getProgress() + 1);
-                    }
-                })
-                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
 
-        dialog = builder.create();
-        dialog.show();
-        initSetScaleDialog(dialog);
-    }
 
-    private void showMosaicDialog() {
-        builder = new AlertDialog.Builder(mainActivity);
-        builder.setTitle("Draw mosaic?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        mainActivity.getMyView().drawMosaic();
-                    }
-                })
-                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                });
 
-        dialog = builder.create();
-        dialog.show();
-    }
 
-    private void showSettingsDialog() {
-        View setSettingsView = mainActivity.getLayoutInflater().inflate(R.layout.ad_settings_content, null);
-        prepareView(setSettingsView);
-
-        builder = new AlertDialog.Builder(mainActivity);
-        builder.setTitle("Settings")
-                .setView(setSettingsView)
-                .setPositiveButton("APPLY", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        applySettings();
-                    }
-                })
-                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-
-        dialog = builder.create();
-        dialog.show();
-        initSettingsDialog(dialog);
-    }
 
     private void showOpenFileDialog() {
         File sdPath = new File(Environment.getExternalStorageDirectory() + "/" + "MyFiles");
@@ -296,45 +223,9 @@ class DialogWindowManager {
     }
 
 
-    private void initSetScaleDialog(AlertDialog dialog) {
-        scaleTextView = (TextView) dialog.findViewById(R.id.textScale);
-        scaleTextView.setText(String.valueOf(AppSettings.getInstance().getBitmapScale()));
 
-        scaleSeekBar = (SeekBar) dialog.findViewById(R.id.seekBar);
-        scaleSeekBar.setProgress(AppSettings.getInstance().getBitmapScale() - 1);
-        scaleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                scaleTextView.setText(String.valueOf(i + 1));
-            }
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
 
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-    }
-
-    private void initSettingsDialog(AlertDialog dialog) {
-        bitmapWidthEdit = (TextView) dialog.findViewById(R.id.bitmapWidthEdit);
-        bitmapWidthEdit.setText(String.valueOf(AppSettings.getInstance().getBitmapWidth()));
-
-        bitmapHeightEdit = (TextView) dialog.findViewById(R.id.bitmapHeightEdit);
-        bitmapHeightEdit.setText(String.valueOf(AppSettings.getInstance().getBitmapHeight()));
-
-        lineSpinner = (Spinner) dialog.findViewById(R.id.lineSpinner);
-        lineSpinner.setSelection(AppSettings.getInstance().getLineDrawingAlgorithm());
-        circleSpinner = (Spinner) dialog.findViewById(R.id.circleSpinner);
-        circleSpinner.setSelection(AppSettings.getInstance().getCircleDrawingAlgorithm());
-
-        mosaicSize = (TextView) dialog.findViewById(R.id.mosaicSizeEdit);
-        mosaicSize.setText(String.valueOf(AppSettings.getInstance().getMosaicSize()));
-    }
 
     private void initSetFileNameDialog(AlertDialog dialog) {
         Date dateNow = new Date();
@@ -354,23 +245,7 @@ class DialogWindowManager {
     }
 
 
-    private void applySettings() {
-        AppSettings appSettings = AppSettings.getInstance();
-        int newBitmapWidth = Integer.parseInt(bitmapWidthEdit.getText().toString());
-        int newBitmapHeight = Integer.parseInt(bitmapHeightEdit.getText().toString());
 
-        if (appSettings.getBitmapWidth() != newBitmapWidth || AppSettings.getInstance().getBitmapHeight() != newBitmapHeight) {
-            appSettings.setBitmapWidth(newBitmapWidth);
-            appSettings.setBitmapHeight(newBitmapHeight);
-            mainActivity.getMyView().updateBitmap();
-        }
-
-        appSettings.setLineDrawingAlgorithm(lineSpinner.getSelectedItemPosition());
-        appSettings.setCircleDrawingAlgorithm(circleSpinner.getSelectedItemPosition());
-        mainActivity.getMyView().setDrawingTool(mainActivity.getMyView().getSelectedTool());
-
-        appSettings.setMosaicSize(Integer.parseInt(mosaicSize.getText().toString()));
-    }
 
     private void applyObjSettings() {
         AppSettings.getInstance().setObjFilling(objIsFilling.isChecked());
