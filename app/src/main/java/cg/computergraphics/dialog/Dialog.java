@@ -12,12 +12,12 @@ import cg.computergraphics.MainActivity;
 
 public abstract class Dialog {
 
-    protected AlertDialog dialog;
-    protected AlertDialog.Builder builder;
+    AlertDialog dialog;
+    AlertDialog.Builder builder;
 
     protected MainActivity mainActivity;
 
-    public Dialog(MainActivity mainActivity) {
+    Dialog(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
         builder = new AlertDialog.Builder(mainActivity);
         build();
@@ -25,7 +25,7 @@ public abstract class Dialog {
 
     abstract void build();
 
-    protected void prepareView(View view) {
+    void prepareView(View view) {
         if (view.getParent() != null) ((ViewGroup) view.getParent()).removeView(view);
     }
 }

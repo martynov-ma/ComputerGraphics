@@ -20,13 +20,18 @@ import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import cg.computergraphics.dialog.ColorPickerDialog;
+import cg.computergraphics.dialog.MosaicDialog;
+import cg.computergraphics.dialog.OpenFileDialog;
+import cg.computergraphics.dialog.SetFileNameDialog;
+import cg.computergraphics.dialog.SetScaleDialog;
+import cg.computergraphics.dialog.SettingsDialog;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private MyView myview;
     private Drawer sideBar;
-
-    private DialogWindowManager dialogWindowManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +42,6 @@ public class MainActivity extends AppCompatActivity {
         myview = (MyView) findViewById(R.id.myview);
         myview.setBitmapScale(AppSettings.getInstance().getBitmapScale());
         myview.setDrawingTool(AppSettings.getInstance().getDefaultTool());
-
-
-        //alert dialogs manager
-        dialogWindowManager = new DialogWindowManager(MainActivity.this);
 
         //toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                                     @Override
                                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                                        dialogWindowManager.showDialog(DialogWindowManager.IDD_MOSAIC);
+                                        new MosaicDialog(MainActivity.this);
                                         return false;
                                     }
                                 }),
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         colorPickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialogWindowManager.showDialog(DialogWindowManager.IDD_COLOR_PICKER);
+                new ColorPickerDialog(MainActivity.this);
             }
         });
 
@@ -159,16 +160,16 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.menuitem_readfile:
-                dialogWindowManager.showDialog(DialogWindowManager.IDD_OPEN_FILE);
+                new OpenFileDialog(MainActivity.this);
                 break;
             case R.id.menuitem_writefile:
-                dialogWindowManager.showDialog(DialogWindowManager.IDD_SET_FILE_NAME);
+                new SetFileNameDialog(MainActivity.this);
                 break;
             case R.id.menuitem_scale:
-                dialogWindowManager.showDialog(DialogWindowManager.IDD_SET_SCALE);
+                new SetScaleDialog(MainActivity.this);
                 break;
             case R.id.menuitem_settings:
-                dialogWindowManager.showDialog(DialogWindowManager.IDD_SETTINGS);
+                new SettingsDialog(MainActivity.this);
                 break;
         }
         return super.onOptionsItemSelected(item);
